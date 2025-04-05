@@ -176,48 +176,44 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 		AItem* Item = Cast<AItem>(hitinfo.GetActor());
 		if (Item != nullptr)
 		{
-			if (ItemComponent == nullptr)
-			{
-				UE_LOG(LogTemp,Warning,TEXT("컴포넌트 억까다인마")) return;
-			};
-			if (Item && ItemComponent && ItemComponent->ItemCompStruct.Num() > 0)
-			{
-				for (int32 i = 0; i < ItemComponent->ItemCompStruct.Num(); i++)
-				{
-					if (ItemComponent->ItemCompStruct[i].ItemIndex == Item->ItemStruct.ItemIndex)
-					{
-						ItemComponent->ItemCompStruct[i].ItemNum++;
-						UInventorySlotUI* Slot = Cast<UInventorySlotUI>(InventoryMenu->WBP_Inventory->BoxSlot->GetChildAt(i));
-						if (Slot)
-						{
-							Slot->ItemCount->SetText(FText::AsNumber(ItemComponent->ItemCompStruct[i].ItemNum));
-						}
-						SameItem = true;
-						break;
-					}
-				}
-			}
-
-			// for (int32 i = 0; i < ItemComponent->ItemCompStruct.Num(); i++)
+			// if (Item && ItemComponent && ItemComponent->ItemCompStruct.Num() > 0)
 			// {
-			// 	// UE_LOG(LogTemp,Warning,TEXT("캐릭터 아이템창 슬롯 갯수%d 현재 아이템창 인덱스 값%d"),i,ItemComponent->ItemCompStruct[i].ItemIndex);
-			// 	if (ItemComponent->ItemCompStruct.Num() > 0 && ItemComponent->ItemCompStruct[i].ItemIndex == Item->ItemStruct.ItemIndex)
+			// 	for (int32 i = 0; i < ItemComponent->ItemCompStruct.Num(); i++)
 			// 	{
-			// 		// UE_LOG(LogTemp,Warning,TEXT("잡았다!! 캐릭터 아이템창 슬롯 갯수%d 주운 아이템 인덱스%d"),i,Item->ItemStruct.ItemIndex);
-			// 		ItemComponent->ItemCompStruct[i].ItemNum++;
-   //
-			// 		UInventorySlotUI* Slot = Cast<UInventorySlotUI>(InventoryMenu->WBP_Inventory->BoxSlot->GetChildAt(i));
-   //                  if (Slot != nullptr)
-   //                  {
-   //                  	Slot->ItemCount->SetText(FText::AsNumber(ItemComponent->ItemCompStruct[i].ItemNum));
-   //                  }
-			// 		else
+			// 		if (ItemStructArray[i].ItemIndex == Item->ItemStruct.ItemIndex)
 			// 		{
-			// 			UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 캐스팅 없음"))
+			// 			ItemStructArray[i].ItemNum++;
+			// 			UInventorySlotUI* Slot = Cast<UInventorySlotUI>(InventoryMenu->WBP_Inventory->BoxSlot->GetChildAt(i));
+			// 			if (Slot)
+			// 			{
+			// 				Slot->ItemCount->SetText(FText::AsNumber(ItemComponent->ItemCompStruct[i].ItemNum));
+			// 			}
+			// 			SameItem = true;
+			// 			break;
 			// 		}
-			// 		break;
 			// 	}
 			// }
+
+			for (int32 i = 0; i < ItemStructArray.Num(); i++)
+			{
+				// UE_LOG(LogTemp,Warning,TEXT("캐릭터 아이템창 슬롯 갯수%d 현재 아이템창 인덱스 값%d"),i,ItemComponent->ItemCompStruct[i].ItemIndex);
+				if (ItemStructArray.Num() > 0 && ItemStructArray[i].ItemIndex == Item->ItemStruct.ItemIndex)
+				{
+					// UE_LOG(LogTemp,Warning,TEXT("잡았다!! 캐릭터 아이템창 슬롯 갯수%d 주운 아이템 인덱스%d"),i,Item->ItemStruct.ItemIndex);
+					ItemStructArray[i].ItemNum++;
+   
+					UInventorySlotUI* Slot = Cast<UInventorySlotUI>(InventoryMenu->WBP_Inventory->BoxSlot->GetChildAt(i));
+                    if (Slot != nullptr)
+                    {
+                    	Slot->ItemCount->SetText(FText::AsNumber(ItemStructArray[i].ItemNum));
+                    }
+					else
+					{
+						UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 캐스팅 없음"))
+					}
+					break;
+				}
+			}
 			for (UWidget* Slot : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
 			{
 				if (SlotIndexArray.Contains(Item->ItemStruct.ItemIndex))
@@ -236,43 +232,13 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 			Slot->ItemIconImage->SetBrush(Brush);
 			InventoryMenu->WBP_Inventory->BoxSlot->AddChildToWrapBox(Slot);
 			//아이템 컴포넌트 스트럭트 갯수증가
-			ItemComponent->ItemCompStruct.Add(Item->ItemStruct);
+			ItemStructArray.Add(Item->ItemStruct);
 			
 			for (int32 i = 0 ; i < SlotIndexArray.Num() ; i++)
 			{
 				UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 창 갯수%d index%d"),SlotIndexArray.Num(),SlotIndexArray[i])
 			}
 		}
-		// bool bAlreadyHasItem = false;
-			//
-			// for (UWidget* Widget : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
-			// {
-			// 	UInventorySlotUI* Slot = Cast<UInventorySlotUI>(Widget);
-			// 	UInventorySlotUI* CastedSlot = Cast<UInventorySlotUI>(Slot);
-			// 	
-			// 	if (CastedSlot && SlotIndexArray.Contains(CatchItem->ItemStruct.ItemIndex))
-			// 	{
-			// 		UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 차일드 갯수%d"),InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren().Num());
-			// 		bAlreadyHasItem = true;
-			// 		break;
-			// 	}
-			// }
-			//
-			// // 중복 아니면 새 슬롯 추가
-			// if (!bAlreadyHasItem)
-			// {
-			// 	UInventorySlotUI* ItemSlot = CreateWidget<UInventorySlotUI>(GetWorld(), InventorySLotFactory);
-			// 	FSlateBrush Brush;
-			// 	Brush.SetResourceObject(ItemTextures[CatchItem->ItemStruct.ItemIndex]);
-			// 	
-			// 	ItemSlot->ItemIconImage->SetBrush(Brush);
-			// 	SlotIndexArray.Add(CatchItem->ItemStruct.ItemIndex);
-			// 	for (int32 i = 0 ; i < SlotIndexArray.Num() ; i++)
-			// 	{
-			// 		UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 창 갯수%d index%d"),SlotIndexArray.Num(),SlotIndexArray[i])
-			// 	}
-			// 	InventoryMenu->WBP_Inventory->BoxSlot->AddChildToWrapBox(ItemSlot);
-			// }
 	}
 }
 
