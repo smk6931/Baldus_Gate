@@ -67,6 +67,9 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
 	TSubclassOf<class AItem> PlayerItemFactory;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
+	TSubclassOf<class UInventorySlotUI> InventorySLotFactory;
+
 protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
@@ -91,6 +94,10 @@ public:
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
 	void RandomItemDrop();
+
+	void CatchItemDrop();
+
+	void AddItemSlot();
 
 };
 

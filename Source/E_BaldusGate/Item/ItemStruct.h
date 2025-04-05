@@ -10,14 +10,14 @@ struct FItemStruct
 
 public:
 	UPROPERTY(EditAnywhere)
-	FString ItemName;
+	FString ItemName = FString("ItemName");
 
 	UPROPERTY(EditAnywhere)
-	FString ItemType;
+	FString ItemType = FString("ItemType");
 
 	UPROPERTY(EditAnywhere)
-	int32 Attack;
+	int32 Attack = 0;
 
 	UPROPERTY(EditAnywhere)
-	int32 Defense;
+	int32 Defense = 0;
 };

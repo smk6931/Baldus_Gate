@@ -13,4 +13,10 @@ UCLASS()
 class E_BALDUSGATE_API UInventoryMenu : public UUserWidget
 {
 	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UInventoryUI* WBP_Inventory;
+
+	virtual void NativeConstruct() override;
 };

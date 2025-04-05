@@ -8,9 +8,13 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "PhysicsAssetRenderUtils.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/WrapBox.h"
 #include "Engine/LocalPlayer.h"
 #include "E_BaldusGate/Item/Item.h"
+#include "E_BaldusGate/UI/InventorySlotUI.h"
+#include "E_BaldusGate/UI/InventoryUI.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -90,11 +94,20 @@ void AE_BaldusGateCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::One))
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::E))
 	{
-		UE_LOG(LogTemplateCharacter, Display, TEXT("Player Controller JustPressed EKey"));
 		RandomItemDrop();
 	}
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::One))
+	{
+		UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 있음"))
+		AddItemSlot();
+	}
+	else
+	{
+		UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 없음"))
+	}
+	
 }
 
 
@@ -139,13 +152,39 @@ void AE_BaldusGateCharacter::ItemInventory()
 		InventoryMenu->RemoveFromParent();
 		flipflop = false;
 		PlayerController->SetShowMouseCursor(false);
-
 	}
 }
 
 void AE_BaldusGateCharacter::RandomItemDrop()
 {
-	PlayerItem = GetWorld()->SpawnActor<AItem>(PlayerItemFactory, GetActorForwardVector()*50.0f, FRotator(0, 0, 0));
+	PlayerItem = GetWorld()->SpawnActor<AItem>(PlayerItemFactory, GetActorLocation() + GetActorForwardVector()*50.0f, FRotator(0, 0, 0));
+}
+
+void AE_BaldusGateCharacter::CatchItemDrop()
+{
+    FHitResult hitinfo;
+	FCollisionShape Shape;
+	FCollisionQueryParams Params;
+
+    DrawDebugBox(GetWorld(), GetActorLocation() + GetActorForwardVector() * 50, FVector(50,50,50),
+    	FColor::Black, false, 0.5, 0, 0.5);
+	
+	bool GetItem = GetWorld()->SweepSingleByChannel(hitinfo, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 50,
+		FQuat::Identity,ECC_Visibility, FCollisionShape::MakeBox(FVector(50,50,50)), Params);
+	if (GetItem)
+	{
+		AItem* CatchItem = Cast<AItem>(hitinfo.GetActor());
+		if (CatchItem != nullptr)
+		{
+			UE_LOG(LogTemplateCharacter, Display, TEXT("캐릭터 Item 먹음"));
+		}
+	}
+}
+
+void AE_BaldusGateCharacter::AddItemSlot()
+{
+	class UInventorySlotUI* ItemSlot = CreateWidget<UInventorySlotUI>(GetWorld(),InventorySLotFactory);
+	InventoryMenu->WBP_Inventory->BoxSlot->AddChildToWrapBox(ItemSlot);
 }
 
 

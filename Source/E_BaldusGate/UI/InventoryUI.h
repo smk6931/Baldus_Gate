@@ -13,4 +13,8 @@ UCLASS()
 class E_BALDUSGATE_API UInventoryUI : public UUserWidget
 {
 	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UWrapBox* BoxSlot;
 };

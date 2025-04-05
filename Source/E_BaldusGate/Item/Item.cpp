@@ -3,6 +3,8 @@
 
 #include "Item.h"
 
+#include "E_BaldusGate/Character/E_BaldusGateCharacter.h"
+
 
 // Sets default values
 AItem::AItem()
@@ -13,6 +15,7 @@ AItem::AItem()
 	SetRootComponent(ItemRoot);
 	ItemComponent = CreateDefaultSubobject<UStaticMeshComponent>("ItemComponent");
 	ItemComponent->SetupAttachment(ItemRoot);
+	ItemComponent->SetSimulatePhysics(false);
 }
 
 // Called when the game starts or when spawned
