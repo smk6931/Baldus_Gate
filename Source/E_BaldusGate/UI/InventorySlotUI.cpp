@@ -2,3 +2,6 @@
 
 
 #include "InventorySlotUI.h"
+
+#include "Components/TextBlock.h"
+

@@ -25,5 +25,8 @@ public:
 	int32 Defense = 0;
 
 	UPROPERTY(EditAnywhere)
+	int32 ItemNum = 0;
+
+	UPROPERTY(EditAnywhere)
 	TArray<UTexture2D*>ImageArray;
 };

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "E_BaldusGate/Item/ItemStruct.h"
 #include "ItemComponent.generated.h"
 
 
@@ -24,4 +25,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
+
+	UPROPERTY(EditAnywhere)
+	TArray<FItemStruct> ItemCompStruct;
 };
