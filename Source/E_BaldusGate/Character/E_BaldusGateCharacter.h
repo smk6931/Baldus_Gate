@@ -7,6 +7,7 @@
 #include "Logging/LogMacros.h"
 #include "E_BaldusGate/UI/InventoryMenu.h" // 이거 꼭 있어야 함
 #include "E_BaldusGate/Item/Item.h"
+#include "Slate/SlateBrushAsset.h"
 #include "E_BaldusGateCharacter.generated.h"
 
 class UInputComponent;
@@ -70,6 +71,15 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
 	TSubclassOf<class UInventorySlotUI> InventorySLotFactory;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
+	TArray<UTexture2D*> ItemTextures;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
+    TArray<int32> SlotIndexArray;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
+	class UItemComponent* ItemComponent;
+	
 protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);

@@ -3,12 +3,15 @@
 #include "CoreMinimal.h"
 #include "ItemStruct.Generated.h"
 
-USTRUCT()
+USTRUCT(Blueprintable, BlueprintType)
 struct FItemStruct
 {
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere)
+    int32 ItemIndex = 0;
+	 
 	UPROPERTY(EditAnywhere)
 	FString ItemName = FString("ItemName");
 
@@ -20,4 +23,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	int32 Defense = 0;
+
+	UPROPERTY(EditAnywhere)
+	TArray<UTexture2D*>ImageArray;
 };

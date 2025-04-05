@@ -1,6 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "E_BaldusGateCharacter.h"
+
+#include "EditorDirectories.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -10,6 +12,7 @@
 #include "InputActionValue.h"
 #include "PhysicsAssetRenderUtils.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Image.h"
 #include "Components/WrapBox.h"
 #include "Engine/LocalPlayer.h"
 #include "E_BaldusGate/Item/Item.h"
@@ -45,9 +48,8 @@ AE_BaldusGateCharacter::AE_BaldusGateCharacter()
 void AE_BaldusGateCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	ItemComponent = CreateWidget<UItemComponent>(ItemComponent);
 	InventoryMenu = CreateWidget<UInventoryMenu>(GetWorld(), InventoryMenuFactory);
-
-    UE_LOG(LogTemp, Display, TEXT("발더스 캐릭터 태어났다"));
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -100,14 +102,12 @@ void AE_BaldusGateCharacter::Tick(float DeltaTime)
 	}
 	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::One))
 	{
-		UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 있음"))
 		AddItemSlot();
 	}
-	else
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::R))
 	{
-		UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 없음"))
+		CatchItemDrop();
 	}
-	
 }
 
 
@@ -140,7 +140,6 @@ void AE_BaldusGateCharacter::Look(const FInputActionValue& Value)
 void AE_BaldusGateCharacter::ItemInventory()
 {
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Item started"));
 	if (flipflop == false)
 	{
 		InventoryMenu->AddToViewport();
@@ -155,18 +154,18 @@ void AE_BaldusGateCharacter::ItemInventory()
 	}
 }
 
+
 void AE_BaldusGateCharacter::RandomItemDrop()
 {
-	PlayerItem = GetWorld()->SpawnActor<AItem>(PlayerItemFactory, GetActorLocation() + GetActorForwardVector()*50.0f, FRotator(0, 0, 0));
+	PlayerItem = GetWorld()->SpawnActor<AItem>(PlayerItemFactory, GetActorLocation() + GetActorForwardVector()*25.0f, FRotator(0, 0, 0));
 }
 
 void AE_BaldusGateCharacter::CatchItemDrop()
 {
     FHitResult hitinfo;
-	FCollisionShape Shape;
 	FCollisionQueryParams Params;
 
-    DrawDebugBox(GetWorld(), GetActorLocation() + GetActorForwardVector() * 50, FVector(50,50,50),
+    DrawDebugBox(GetWorld(), GetActorLocation() + GetActorForwardVector() * 50, FVector(25,25,25),
     	FColor::Black, false, 0.5, 0, 0.5);
 	
 	bool GetItem = GetWorld()->SweepSingleByChannel(hitinfo, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 50,
@@ -176,7 +175,36 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 		AItem* CatchItem = Cast<AItem>(hitinfo.GetActor());
 		if (CatchItem != nullptr)
 		{
-			UE_LOG(LogTemplateCharacter, Display, TEXT("캐릭터 Item 먹음"));
+			bool bAlreadyHasItem = false;
+             			
+             			for (UWidget* Widget : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
+             			{
+             				UInventorySlotUI* Slot = Cast<UInventorySlotUI>(Widget);
+             				UInventorySlotUI* CastedSlot = Cast<UInventorySlotUI>(Slot);
+             				
+             				if (CastedSlot && SlotIndexArray.Contains(CatchItem->ItemStruct.ItemIndex))
+             				{
+             					UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 차일드 갯수%d"),InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren().Num());
+             					bAlreadyHasItem = true;
+             					break;
+             				}
+             			}
+             
+             			// 중복 아니면 새 슬롯 추가
+             			if (!bAlreadyHasItem)
+             			{
+             				UInventorySlotUI* ItemSlot = CreateWidget<UInventorySlotUI>(GetWorld(), InventorySLotFactory);
+             				FSlateBrush Brush;
+             				Brush.SetResourceObject(ItemTextures[CatchItem->ItemStruct.ItemIndex]);
+             				
+             				ItemSlot->ItemIconImage->SetBrush(Brush);
+             				SlotIndexArray.Add(CatchItem->ItemStruct.ItemIndex);
+             				for (int32 i = 0 ; i < SlotIndexArray.Num() ; i++)
+             				{
+             					UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 창 갯수%d index%d"),SlotIndexArray.Num(),SlotIndexArray[i])
+             				}
+             				InventoryMenu->WBP_Inventory->BoxSlot->AddChildToWrapBox(ItemSlot);
+             			}
 		}
 	}
 }

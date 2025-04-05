@@ -15,15 +15,13 @@ AItem::AItem()
 	SetRootComponent(ItemRoot);
 	ItemComponent = CreateDefaultSubobject<UStaticMeshComponent>("ItemComponent");
 	ItemComponent->SetupAttachment(ItemRoot);
-	ItemComponent->SetSimulatePhysics(false);
+	ItemComponent->SetSimulatePhysics(true);
 }
 
 // Called when the game starts or when spawned
 void AItem::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UE_LOG(LogTemp,Warning,TEXT("AItem::BeginPlay"));
 	
 	RandomItemDrop();
 
@@ -46,5 +44,6 @@ void AItem::RandomItemDrop()
 {
 	ItemIndex = FMath::RandRange(0,ItemMeshes.Num()-1);
 	ItemComponent->SetStaticMesh(ItemMeshes[ItemIndex]);
+	ItemStruct.ItemIndex = ItemIndex;
 }
 
