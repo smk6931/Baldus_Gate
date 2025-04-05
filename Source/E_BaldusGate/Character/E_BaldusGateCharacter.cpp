@@ -180,13 +180,14 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 		{
 			for (int32 i = 0; i < InventoryMenu->WBP_Inventory->BoxSlot->GetChildrenCount() ; i++)
 			{
-				// UE_LOG(LogTemp,Warning,TEXT("캐릭터 아이템창 슬롯 갯수%d 현재 아이템창 인덱스 값%d"),i,ItemComponent->ItemCompStruct[i].ItemIndex);
+				UE_LOG(LogTemp,Warning,TEXT("캐릭터 아이템창 슬롯 갯수%d 현재 아이템창 인덱스 값%d"),i,ItemComponent->ItemCompStruct[i].ItemIndex);
 				UInventorySlotUI* Slot = Cast<UInventorySlotUI>(InventoryMenu->WBP_Inventory->BoxSlot->GetChildAt(i));
 				if (ItemComponent->ItemCompStruct[i].ItemIndex == Item->ItemIndex)
 				{
-					// UE_LOG(LogTemp,Warning,TEXT("캐릭터 아이템창 슬롯 갯수%d 주운 아이템 인덱스%d"),i,Item->ItemStruct.ItemIndex);
+					UE_LOG(LogTemp,Warning,TEXT("잡았다!! 캐릭터 아이템창 슬롯 갯수%d 주운 아이템 인덱스%d"),i,Item->ItemStruct.ItemIndex);
 					ItemComponent->ItemCompStruct[i].ItemNum++;
 					Slot->ItemCount->SetText(FText::AsNumber(ItemComponent->ItemCompStruct[i].ItemNum));
+					break;
 				}
 			}
 			for (UWidget* Slot : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
@@ -214,8 +215,6 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 				UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 창 갯수%d index%d"),SlotIndexArray.Num(),SlotIndexArray[i])
 			}
 		}
-		Item->Destroy();
-		
 		// bool bAlreadyHasItem = false;
 			//
 			// for (UWidget* Widget : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
