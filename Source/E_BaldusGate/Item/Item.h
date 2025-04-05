@@ -3,8 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ItemStruct.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
+#include "ItemStruct.h"
 #include "Item.generated.h"
 
 UCLASS()
@@ -16,6 +18,8 @@ public:
 	// Sets default values for this actor's properties
 	AItem();
 
+	FItemStruct ItemStruct;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -42,4 +46,6 @@ public:
 	UFUNCTION()
 	void OnMyBeginOverlapped(UPrimitiveComponent* OverlaeppedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSwimming, const FHitResult& SwimmingResult);
+
+	void RandomItemDrop();
 };

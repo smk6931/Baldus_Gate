@@ -55,13 +55,21 @@ public:
 	AE_BaldusGateCharacter();
 
 	UPROPERTY(EditAnywhere,Category = UI)
-	class UInventoryMenu* InventoryUI;
+	class UInventoryMenu* InventoryMenu;
 
 	UPROPERTY(EditAnywhere, Category = UI)
-	TSubclassOf<class UInventoryMenu> InventoryUIFactory;
+	TSubclassOf<class UInventoryMenu> InventoryMenuFactory;
 
 	bool flipflop = false;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class UItemComponent* ItemComponent;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class AItem* Item;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TSubclassOf<class AItem> ItemFactory;
 
 protected:
 	/** Called for movement input */
@@ -70,7 +78,7 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
-	void Item();
+	void ItemInventory();
 
 protected:
 	// APawn interface
@@ -84,6 +92,8 @@ public:
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+
+	void RandomItemDrop();
 
 };
 

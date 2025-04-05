@@ -11,6 +11,8 @@
 #include "InputActionValue.h"
 #include "Blueprint/UserWidget.h"
 #include "Engine/LocalPlayer.h"
+#include "E_BaldusGate/Component/ItemComponent.h"
+#include "E_BaldusGate/Item/Item.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -41,7 +43,9 @@ AE_BaldusGateCharacter::AE_BaldusGateCharacter()
 void AE_BaldusGateCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	InventoryUI = CreateWidget<UInventoryMenu>(GetWorld(), InventoryUIFactory);
+    ItemComponent = CreateDefaultSubobject<UItemComponent>(TEXT("ItemComponent"));
+	
+	InventoryMenu = CreateWidget<UInventoryMenu>(GetWorld(), InventoryMenuFactory);
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -76,7 +80,7 @@ void AE_BaldusGateCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AE_BaldusGateCharacter::Look);
 
 		// Item
-		EnhancedInputComponent->BindAction(ItemAction, ETriggerEvent::Started, this, &AE_BaldusGateCharacter::Item);
+		EnhancedInputComponent->BindAction(ItemAction, ETriggerEvent::Started, this, &AE_BaldusGateCharacter::ItemInventory);
 	}
 	else
 	{
@@ -111,23 +115,28 @@ void AE_BaldusGateCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void AE_BaldusGateCharacter::Item()
+void AE_BaldusGateCharacter::ItemInventory()
 {
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Item started"));
 	if (flipflop == false)
 	{
-		InventoryUI->AddToViewport();
+		InventoryMenu->AddToViewport();
 		flipflop = true;
 		PlayerController->SetShowMouseCursor(true);
 	}
 	else
 	{
-		InventoryUI->RemoveFromParent();
+		InventoryMenu->RemoveFromParent();
 		flipflop = false;
 		PlayerController->SetShowMouseCursor(false);
 
 	}
+}
+
+void AE_BaldusGateCharacter::RandomItemDrop()
+{
+	Item = GetWorld()->SpawnActor<AItem>(ItemFactory, GetActorForwardVector()*50.0f, FRotator(0, 0, 0));
 }
 
 

@@ -19,7 +19,8 @@ AItem::AItem()
 void AItem::BeginPlay()
 {
 	Super::BeginPlay();
-	ItemComponent->SetStaticMesh(ItemMeshes[ItemIndex]);
+
+	RandomItemDrop();
 
 	ItemComponent->OnComponentBeginOverlap.AddDynamic(this,&AItem::OnMyBeginOverlapped);
 }
@@ -34,5 +35,11 @@ void AItem::OnMyBeginOverlapped(UPrimitiveComponent* OverlaeppedComponent, AActo
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSwimming, const FHitResult& SwimmingResult)
 {
 	
+}
+
+void AItem::RandomItemDrop()
+{
+	ItemIndex = FMath::RandRange(0,ItemMeshes.Num()-1);
+	ItemComponent->SetStaticMesh(ItemMeshes[ItemIndex]);
 }
 
