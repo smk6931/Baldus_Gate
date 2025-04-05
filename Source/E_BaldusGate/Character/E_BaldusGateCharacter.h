@@ -7,7 +7,7 @@
 #include "Logging/LogMacros.h"
 #include "E_BaldusGate/UI/InventoryMenu.h" // 이거 꼭 있어야 함
 #include "E_BaldusGate/Item/Item.h"
-#include "Slate/SlateBrushAsset.h"
+#include "E_BaldusGate/Component/ItemComponent.h"
 #include "E_BaldusGateCharacter.generated.h"
 
 class UInputComponent;
@@ -62,6 +62,9 @@ public:
 
 	bool flipflop = false;
 
+	UPROPERTY(EditAnywhere)
+	TArray<FItemStruct> ItemStructArray;
+
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = Item)
 	class AItem* PlayerItem;
 
@@ -77,7 +80,7 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
     TArray<int32> SlotIndexArray;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Component)
 	class UItemComponent* ItemComponent;
 	
 protected:
