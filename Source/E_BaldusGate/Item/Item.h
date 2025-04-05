@@ -9,7 +9,7 @@
 #include "ItemStruct.h"
 #include "Item.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class E_BALDUSGATE_API AItem : public AActor
 {
 	GENERATED_BODY()

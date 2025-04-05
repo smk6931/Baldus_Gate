@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "E_BaldusGate/UI/InventoryMenu.h" // 이거 꼭 있어야 함
+#include "E_BaldusGate/Item/Item.h"
 #include "E_BaldusGateCharacter.generated.h"
 
 class UInputComponent;
@@ -49,27 +50,22 @@ class AE_BaldusGateCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ItemAction;
 
-	
-	
 public:
 	AE_BaldusGateCharacter();
 
 	UPROPERTY(EditAnywhere,Category = UI)
 	class UInventoryMenu* InventoryMenu;
-
+	
 	UPROPERTY(EditAnywhere, Category = UI)
 	TSubclassOf<class UInventoryMenu> InventoryMenuFactory;
 
 	bool flipflop = false;
-	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	class UItemComponent* ItemComponent;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	class AItem* Item;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = Item)
+	class AItem* PlayerItem;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	TSubclassOf<class AItem> ItemFactory;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
+	TSubclassOf<class AItem> PlayerItemFactory;
 
 protected:
 	/** Called for movement input */
@@ -85,6 +81,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void NotifyControllerChanged() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
+	virtual void Tick(float DeltaTime) override;
 	// End of APawn interface
 
 public:

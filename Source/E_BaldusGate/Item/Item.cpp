@@ -20,6 +20,8 @@ void AItem::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UE_LOG(LogTemp,Warning,TEXT("AItem::BeginPlay"));
+	
 	RandomItemDrop();
 
 	ItemComponent->OnComponentBeginOverlap.AddDynamic(this,&AItem::OnMyBeginOverlapped);

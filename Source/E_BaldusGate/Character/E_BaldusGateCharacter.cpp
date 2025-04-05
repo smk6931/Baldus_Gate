@@ -1,7 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "E_BaldusGateCharacter.h"
-// #include "E_BaldusGateProjectile.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -11,7 +10,6 @@
 #include "InputActionValue.h"
 #include "Blueprint/UserWidget.h"
 #include "Engine/LocalPlayer.h"
-#include "E_BaldusGate/Component/ItemComponent.h"
 #include "E_BaldusGate/Item/Item.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -43,9 +41,9 @@ AE_BaldusGateCharacter::AE_BaldusGateCharacter()
 void AE_BaldusGateCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-    ItemComponent = CreateDefaultSubobject<UItemComponent>(TEXT("ItemComponent"));
-	
 	InventoryMenu = CreateWidget<UInventoryMenu>(GetWorld(), InventoryMenuFactory);
+
+    UE_LOG(LogTemp, Display, TEXT("발더스 캐릭터 태어났다"));
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -85,6 +83,17 @@ void AE_BaldusGateCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+	}
+}
+
+void AE_BaldusGateCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::One))
+	{
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Player Controller JustPressed EKey"));
+		RandomItemDrop();
 	}
 }
 
@@ -136,7 +145,7 @@ void AE_BaldusGateCharacter::ItemInventory()
 
 void AE_BaldusGateCharacter::RandomItemDrop()
 {
-	Item = GetWorld()->SpawnActor<AItem>(ItemFactory, GetActorForwardVector()*50.0f, FRotator(0, 0, 0));
+	PlayerItem = GetWorld()->SpawnActor<AItem>(PlayerItemFactory, GetActorForwardVector()*50.0f, FRotator(0, 0, 0));
 }
 
 
