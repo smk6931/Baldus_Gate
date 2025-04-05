@@ -13,6 +13,7 @@
 #include "PhysicsAssetRenderUtils.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Image.h"
+#include "Components/TextBlock.h"
 #include "Components/WrapBox.h"
 #include "Engine/LocalPlayer.h"
 #include "E_BaldusGate/Component/ItemComponent.h"
@@ -177,12 +178,21 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 		AItem* Item = Cast<AItem>(hitinfo.GetActor());
 		if (Item != nullptr)
 		{
-			for (UWidget* Widget : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
+			for (int32 i = 0; i < InventoryMenu->WBP_Inventory->BoxSlot->GetChildrenCount() ; i++)
 			{
-				// UInventorySlotUI* Slot = Cast<UInventorySlotUI>(Widget);
+				// UE_LOG(LogTemp,Warning,TEXT("캐릭터 아이템창 슬롯 갯수%d 현재 아이템창 인덱스 값%d"),i,ItemComponent->ItemCompStruct[i].ItemIndex);
+				UInventorySlotUI* Slot = Cast<UInventorySlotUI>(InventoryMenu->WBP_Inventory->BoxSlot->GetChildAt(i));
+				if (ItemComponent->ItemCompStruct[i].ItemIndex == Item->ItemIndex)
+				{
+					// UE_LOG(LogTemp,Warning,TEXT("캐릭터 아이템창 슬롯 갯수%d 주운 아이템 인덱스%d"),i,Item->ItemStruct.ItemIndex);
+					ItemComponent->ItemCompStruct[i].ItemNum++;
+					Slot->ItemCount->SetText(FText::AsNumber(ItemComponent->ItemCompStruct[i].ItemNum));
+				}
+			}
+			for (UWidget* Slot : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
+			{
 				if (SlotIndexArray.Contains(Item->ItemStruct.ItemIndex))
 				{
-					ItemComponent->ItemCompStruct.Add(Item->ItemStruct);
 					SameItem = true;
 					break;
 				}
@@ -196,28 +206,17 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 			Brush.SetResourceObject(ItemTextures[Item->ItemStruct.ItemIndex]);
 			Slot->ItemIconImage->SetBrush(Brush);
 			InventoryMenu->WBP_Inventory->BoxSlot->AddChildToWrapBox(Slot);
+			//아이템 컴포넌트 스트럭트 갯수증가
+			ItemComponent->ItemCompStruct.Add(Item->ItemStruct);
 			
 			for (int32 i = 0 ; i < SlotIndexArray.Num() ; i++)
 			{
 				UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 창 갯수%d index%d"),SlotIndexArray.Num(),SlotIndexArray[i])
 			}
 		}
-			
-
-
-
-
-
-
-
-
-
-
-
-
+		Item->Destroy();
 		
-			
-			// bool bAlreadyHasItem = false;
+		// bool bAlreadyHasItem = false;
 			//
 			// for (UWidget* Widget : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
 			// {
