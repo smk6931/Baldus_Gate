@@ -8,6 +8,7 @@
 #include "E_BaldusGate/UI/InventoryMenu.h" // 이거 꼭 있어야 함
 #include "E_BaldusGate/Item/Item.h"
 #include "E_BaldusGate/Component/ItemComponent.h"
+#include "E_BaldusGate/Item/ItemList/ItemWeapon.h"
 #include "E_BaldusGateCharacter.generated.h"
 
 class UInputComponent;
@@ -78,6 +79,9 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Component)
 	class UItemComponent* ItemComponent;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Component)
+	TSubclassOf<AItemWeapon> ItemWeaponFactory;
 	
 protected:
 	/** Called for movement input */
@@ -102,6 +106,8 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+	void AttackWeapon();
+	
 	void RandomItemDrop();
 
 	void CatchItemDrop();

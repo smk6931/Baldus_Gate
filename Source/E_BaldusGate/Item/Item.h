@@ -39,10 +39,7 @@ public:
 	class UBoxComponent* ItemRoot;
 
 	UPROPERTY(EditAnywhere)
-	int32 ItemIndex = 0;
-
-	UPROPERTY(EditAnywhere)
-	int32 ItemTypeIndex = 0;
+	int32 RandomItemIndex = 0;
 
 	UFUNCTION()
 	void OnMyBeginOverlapped(UPrimitiveComponent* OverlaeppedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,

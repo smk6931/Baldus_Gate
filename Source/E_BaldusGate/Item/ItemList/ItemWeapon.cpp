@@ -27,10 +27,9 @@ void AItemWeapon::Tick(float DeltaTime)
 
 void AItemWeapon::ItemWeaponSpawn()
 {
-	ItemTypeIndex = 1; // 웨폰 타입
-	ItemIndex = 0;
-	ItemComponent->SetStaticMesh(ItemMeshes[ItemIndex]);
-	ItemStruct.ItemIndex = ItemIndex;
+	RandomItemIndex = 0;
+	ItemComponent->SetStaticMesh(ItemMeshes[RandomItemIndex]);
+	ItemStruct.ItemIndex = RandomItemIndex;
 	ItemStruct.ItemTypeIndex = 1;
 }
 

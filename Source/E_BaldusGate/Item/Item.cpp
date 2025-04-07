@@ -43,8 +43,8 @@ void AItem::OnMyBeginOverlapped(UPrimitiveComponent* OverlaeppedComponent, AActo
 
 void AItem::RandomItemDrop()
 {
-	ItemIndex = FMath::RandRange(0,ItemMeshes.Num()-1);
-	ItemComponent->SetStaticMesh(ItemMeshes[ItemIndex]);
-	ItemStruct.ItemIndex = ItemIndex;
+	RandomItemIndex = FMath::RandRange(0,ItemMeshes.Num()-1);
+	ItemComponent->SetStaticMesh(ItemMeshes[RandomItemIndex]);
+	ItemStruct.ItemIndex = RandomItemIndex;
 }
 

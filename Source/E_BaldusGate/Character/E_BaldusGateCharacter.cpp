@@ -9,6 +9,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "MovieSceneTracksComponentTypes.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
@@ -144,6 +145,16 @@ void AE_BaldusGateCharacter::ItemInventory()
 		flipflop = false;
 		PlayerController->SetShowMouseCursor(false);
 	}
+}
+
+void AE_BaldusGateCharacter::AttackWeapon()
+{
+	AItemWeapon* Weapon = GetWorld()->SpawnActor<AItemWeapon>(ItemWeaponFactory);
+	Weapon->ItemComponent->SetSimulatePhysics(false);
+	Weapon->ItemComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Weapon->ItemRoot->SetSimulatePhysics(false);
+	Weapon->ItemRoot->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("hand_rSocket"));
 }
 
 void AE_BaldusGateCharacter::RandomItemDrop()
