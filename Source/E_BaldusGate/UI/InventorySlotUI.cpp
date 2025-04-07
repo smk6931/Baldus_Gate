@@ -10,16 +10,16 @@
 void UInventorySlotUI::NativeConstruct()
 {
 	Super::NativeConstruct();
-    SlotItemBt->OnClicked.AddDynamic(this,&UInventorySlotUI::OnCliced);
+    // SlotItemBt->OnClicked.AddDynamic(this,&UInventorySlotUI::OnCliced);
 	
 	this->SetVisibility(ESlateVisibility::Visible); // 보장
 	this->SetIsEnabled(true); // 활성화
 }
 
-void UInventorySlotUI::OnCliced()
-{
-	UE_LOG(LogTemp, Display, TEXT("InventorySlotUI::OnCliced"));
-}
+// void UInventorySlotUI::OnCliced()
+// {
+// 	UE_LOG(LogTemp, Display, TEXT("InventorySlotUI::OnCliced"));
+// }
 
 FReply UInventorySlotUI::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {

@@ -23,14 +23,13 @@ public:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UTextBlock* ItemCount;
 
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	class UButton* SlotItemBt;
+	// UPROPERTY(EditAnywhere, meta = (BindWidget))
+	// class UButton* SlotItemBt;
 
 	virtual void NativeConstruct() override;
 
-	UFUNCTION()
-	void OnCliced();
-	FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
+	// void OnCliced();
+	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 
 	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent,
 	                                  UDragDropOperation*& OutOperation) override;
