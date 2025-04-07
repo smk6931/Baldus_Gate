@@ -28,4 +28,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TArray<FItemStruct> ItemCompStruct;
+
+	UPROPERTY(EditAnywhere)
+	FString ItemComponent = "ItemComponent";
+
 };

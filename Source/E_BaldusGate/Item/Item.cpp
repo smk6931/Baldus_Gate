@@ -15,13 +15,14 @@ AItem::AItem()
 	SetRootComponent(ItemRoot);
 	ItemComponent = CreateDefaultSubobject<UStaticMeshComponent>("ItemComponent");
 	ItemComponent->SetupAttachment(ItemRoot);
-	ItemComponent->SetSimulatePhysics(true);
 }
 
 // Called when the game starts or when spawned
 void AItem::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// ItemComponent->SetSimulatePhysics(true);
 	
 	RandomItemDrop();
 

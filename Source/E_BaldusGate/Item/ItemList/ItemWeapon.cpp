@@ -16,8 +16,6 @@ void AItemWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	ItemComponent->SetSimulatePhysics(false);
-	
 	ItemWeaponSpawn();
 }
 
