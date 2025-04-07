@@ -201,6 +201,7 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 			SlotIndexArray.Add(Item->ItemStruct.ItemIndex);
 			FSlateBrush Brush;
 			UInventorySlotUI* Slot = CreateWidget<UInventorySlotUI>(GetWorld(), InventorySLotFactory);
+			UE_LOG(LogTemp, Warning, TEXT("✅ 슬롯 생성됨: %s"), *Slot->GetName())
 			Brush.SetResourceObject(Item->ItemStruct.ItemTextures[Item->ItemStruct.ItemIndex]);
 			Slot->ItemIconImage->SetBrush(Brush);
 			InventoryMenu->WBP_Inventory->BoxSlot->AddChildToWrapBox(Slot);
