@@ -177,6 +177,8 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 				if (Slot != nullptr && Slot->ItemStruct.ItemIndex == Item->ItemStruct.ItemIndex)
 				{
 					Slot->ItemStruct.ItemNum++;
+					// 아이템 넘기는게 과연좋은지 아중에 확인해보자
+					Slot->Item = Item;
 					Slot->ItemCount->SetText(FText::AsNumber(Slot->ItemStruct.ItemNum));
 					SameItem = true;
 					break;

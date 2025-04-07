@@ -19,6 +19,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
 	FItemStruct ItemStruct;
+
+	UPROPERTY(EditAnywhere)
+	class AItem* Item;
 	
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UImage* ItemIconImage;
