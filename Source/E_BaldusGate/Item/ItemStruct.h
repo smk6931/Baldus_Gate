@@ -9,8 +9,11 @@ struct FItemStruct
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere) // 아이템 상세종류
     int32 ItemIndex = 0;
+
+	UPROPERTY(EditAnywhere)
+	int32 ItemTypeIndex = 0; // 아이템 종류
 	 
 	UPROPERTY(EditAnywhere)
 	FString ItemName = FString("ItemName");

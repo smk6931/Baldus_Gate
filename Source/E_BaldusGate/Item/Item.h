@@ -30,9 +30,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TArray<UStaticMesh*> ItemMeshes;
-	
-	UPROPERTY(EditAnywhere)
-	class UStaticMeshComponent* ItemMesh;
 
 	UPROPERTY(EditAnywhere)
     class UStaticMeshComponent* ItemComponent;
@@ -42,6 +39,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	int32 ItemIndex = 0;
+
+	UPROPERTY(EditAnywhere)
+	int32 ItemTypeIndex = 0;
 
 	UFUNCTION()
 	void OnMyBeginOverlapped(UPrimitiveComponent* OverlaeppedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
