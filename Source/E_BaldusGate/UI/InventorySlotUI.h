@@ -16,6 +16,9 @@ class E_BALDUSGATE_API UInventorySlotUI : public UUserWidget
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
+	FItemStruct ItemStruct;
 	
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UImage* ItemIconImage;
@@ -33,4 +36,7 @@ public:
 
 	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent,
 	                                  UDragDropOperation*& OutOperation) override;
+	
+	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent,
+		UDragDropOperation* InOperation) override;
 };
