@@ -31,5 +31,5 @@ public:
 	int32 ItemNum = 0;
 
 	UPROPERTY(EditAnywhere)
-	TArray<UTexture2D*>ImageArray;
+	TArray<UTexture2D*>ItemTextures;
 };

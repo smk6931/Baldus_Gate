@@ -167,24 +167,6 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 		AItem* Item = Cast<AItem>(hitinfo.GetActor());
 		if (Item != nullptr)
 		{
-			// if (Item && ItemComponent && ItemComponent->ItemCompStruct.Num() > 0)
-			// {
-			// 	for (int32 i = 0; i < ItemComponent->ItemCompStruct.Num(); i++)
-			// 	{
-			// 		if (ItemStructArray[i].ItemIndex == Item->ItemStruct.ItemIndex)
-			// 		{
-			// 			ItemStructArray[i].ItemNum++;
-			// 			UInventorySlotUI* Slot = Cast<UInventorySlotUI>(InventoryMenu->WBP_Inventory->BoxSlot->GetChildAt(i));
-			// 			if (Slot)
-			// 			{
-			// 				Slot->ItemCount->SetText(FText::AsNumber(ItemComponent->ItemCompStruct[i].ItemNum));
-			// 			}
-			// 			SameItem = true;
-			// 			break;
-			// 		}
-			// 	}
-			// }
-
 			for (int32 i = 0; i < ItemStructArray.Num(); i++)
 			{
 				// UE_LOG(LogTemp,Warning,TEXT("캐릭터 아이템창 슬롯 갯수%d 현재 아이템창 인덱스 값%d"),i,ItemComponent->ItemCompStruct[i].ItemIndex);
@@ -219,7 +201,7 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 			SlotIndexArray.Add(Item->ItemStruct.ItemIndex);
 			FSlateBrush Brush;
 			UInventorySlotUI* Slot = CreateWidget<UInventorySlotUI>(GetWorld(), InventorySLotFactory);
-			Brush.SetResourceObject(ItemTextures[Item->ItemStruct.ItemIndex]);
+			Brush.SetResourceObject(Item->ItemStruct.ItemTextures[Item->ItemStruct.ItemIndex]);
 			Slot->ItemIconImage->SetBrush(Brush);
 			InventoryMenu->WBP_Inventory->BoxSlot->AddChildToWrapBox(Slot);
 			//아이템 컴포넌트 스트럭트 갯수증가
@@ -229,9 +211,9 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 			{
 				UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 창 갯수%d index%d"),SlotIndexArray.Num(),SlotIndexArray[i])
 			}
-		}
+		}Item->Destroy();
+
 	}
-	Destroy();
 }
 
 void AE_BaldusGateCharacter::AddItemSlot()
