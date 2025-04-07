@@ -26,9 +26,6 @@ public:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UTextBlock* ItemCount;
 
-	// UPROPERTY(EditAnywhere, meta = (BindWidget))
-	// class UButton* SlotItemBt;
-
 	virtual void NativeConstruct() override;
 
 	// void OnCliced();
