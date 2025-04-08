@@ -114,6 +114,23 @@ void AE_BaldusGateCharacter::Tick(float DeltaTime)
 	{
 		JsonToItem();
 	}
+
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Five))
+	{
+		ExportStructArray();
+	}
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Six))
+	{
+		ImportStructArray();
+	}
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Seven))
+	{
+		JsonToItemArray();
+	}
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Eight))
+	{
+		SaveJsonString();
+	}
 }
 
 
@@ -262,5 +279,49 @@ void AE_BaldusGateCharacter::JsonToItem()// 4번
 	JsonItem->ItemStruct = MyItemStruct;
 	JsonItem->ItemComponent->SetStaticMesh(JsonItem->ItemMeshes[JsonItem->ItemStruct.ItemIndex]);
     UE_LOG(LogTemp,Warning,TEXT("캐릭터 제이슨 아이템 소환 %i"),JsonItem->ItemStruct.ItemIndex);
+}
+
+void AE_BaldusGateCharacter::ExportStructArray() // 5번 슬롯 아이템 -> 구조체 배열 넣기
+{
+	for (int32 i = 0; i < InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren().Num(); i++)
+	{
+		UInventorySlotUI* SlotUi = Cast<UInventorySlotUI>(InventoryMenu->WBP_Inventory->BoxSlot->GetChildAt(i));
+		UE_LOG(LogTemp,Warning,TEXT("5번 슬롯 -> 구조체 인덱스 %i"),SlotUi->ItemStruct.ItemIndex);
+		ItemStructArray.Add(SlotUi->ItemStruct);
+	}
+}
+
+void AE_BaldusGateCharacter::ImportStructArray() // 6번 구조체 배열-> 제이슨
+{
+	for (int32 i = 0; i < ItemStructArray.Num(); i++)
+	{
+		FJsonObjectConverter::UStructToJsonObjectString(ItemStructArray[i],jsonString);
+		MyJsonArray.Add(jsonString);
+		UE_LOG(LogTemp,Warning,TEXT("6번 제이슨 인덱스%s"),*jsonString);
+	}
+}
+
+void AE_BaldusGateCharacter::JsonToItemArray() // 7번 제이슨 -> 구조체 배열 및 소환
+{
+	for (int32 i = 0; i < MyJsonArray.Num(); i++)
+	{
+		AItem* Item = GetWorld()->SpawnActor<AItem>(PlayerItemFactory,GetActorLocation() + GetActorForwardVector() * 100,
+			FRotator(0,0,0));
+		Item->ItemRoot->SetSimulatePhysics(true);
+		FJsonObjectConverter::JsonObjectStringToUStruct(MyJsonArray[i],&MyItemStruct);
+		MyItemStructArray.Add(MyItemStruct);
+		Item->ItemStruct = MyItemStructArray[i];
+		Item->ItemComponent->SetStaticMesh(Item->ItemMeshes[Item->ItemStruct.ItemIndex]);
+		UE_LOG(LogTemp,Warning,TEXT("7번 제이슨 -> 구조체 아이템 인덱스%d"),MyItemStructArray[i].ItemIndex);
+	}
+}
+
+void AE_BaldusGateCharacter::SaveJsonString() // 8번 제이슨 파일 저장
+{
+	for (int32 i = 0; i < MyJsonArray.Num(); i++)
+	{
+		FString path = FString::Printf(TEXT("%s%s"),*FPaths::ProjectDir(),TEXT("test.txt"));
+		FFileHelper::SaveStringToFile(MyJsonArray[i],*path);
+	}
 }
 

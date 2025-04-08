@@ -62,6 +62,18 @@ public:
 	UPROPERTY(EditAnywhere)
 	TArray<FItemStruct> ItemStructArray;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
+	FItemStruct MyItemStruct;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
+	TArray<FItemStruct> MyItemStructArray;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
+	TArray<FString> MyJsonArray;
+
+	UPROPERTY(EditAnywhere)
+	FString jsonString;
+
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = Item)
 	class AItem* PlayerItem;
 
@@ -120,13 +132,19 @@ public:
 
 	void JsonToItem();
 
-	UPROPERTY(EditAnywhere)
-	FString jsonString;
+
+	void ExportStructArray();
+
+	void ImportStructArray();
+
+	void JsonToItemArray();
+
+	void SaveJsonString();
+
 	
 
 public:
-	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
-	FItemStruct MyItemStruct;
+	
 	
 
 };
