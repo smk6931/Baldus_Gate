@@ -13,7 +13,10 @@ public:
     int32 ItemIndex = 0;
 
 	UPROPERTY(EditAnywhere) // 아이템 종류
-	int32 ItemTypeIndex = 0; 
+	int32 ItemTypeIndex = 0;
+
+	UPROPERTY(EditAnywhere)
+	int32 ItemDetailIndex = 0;
 	 
 	UPROPERTY(EditAnywhere) // 아이템 이름
 	FString ItemName = FString("ItemName");
@@ -33,9 +36,12 @@ public:
 	UPROPERTY(EditAnywhere) // 소모 HP 상승
 	int32 HPup = 0;
 
-	UPROPERTY(EditAnywhere) // 아이템 텍스쳐
+	UPROPERTY(EditAnywhere) // 아이템 텍스쳐 int로 바꿀예정	
 	TArray<UTexture2D*>ItemTextures;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere) // 아이템 메쉬 int로 바꿀예정
 	TArray<UStaticMesh*>ItemMeshes;
+
+	UPROPERTY(EditAnywhere)
+	bool bEquip = true;
 };

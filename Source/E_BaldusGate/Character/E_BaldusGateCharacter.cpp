@@ -184,10 +184,10 @@ void AE_BaldusGateCharacter::AttackWeapon()
 	Weapon->ItemComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Weapon->ItemRoot->SetSimulatePhysics(false);
 	Weapon->ItemRoot->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("hand_rSocket"));
-	// Weapon->SetActorLocation(FVector(5.431510,-13.000000,60.939114));
-	// Weapon->SetActorRotation(FRotator(69.285781,223.025730,224.784160));
-	// Weapon->SetActorScale3D(FVector(0.015));
+	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("hand_rSocket"));
+	Weapon->SetActorRelativeLocation(FVector(5.431510,-13.000000,60.939114));
+	Weapon->SetActorRelativeRotation(FRotator(69.285781,223.025730,224.784160));
+	// Weapon->SetActorRelativeScale3D(FVector(0.015));
 }
 
 void AE_BaldusGateCharacter::RandomItemDrop()
@@ -295,8 +295,8 @@ void AE_BaldusGateCharacter::ImportStructArray() // 6번 구조체 배열-> 제�
 {
 	for (int32 i = 0; i < ItemStructArray.Num(); i++)
 	{
-		FJsonObjectConverter::UStructToJsonObjectString(ItemStructArray[i],jsonString);
-		MyJsonArray.Add(jsonString);
+		FJsonObjectConverter::UStructToJsonObjectString
+		(ItemStructArray[i],jsonString);MyJsonArray.Add(jsonString);
 		UE_LOG(LogTemp,Warning,TEXT("6번 제이슨 인덱스%s"),*jsonString);
 	}
 }
@@ -320,7 +320,8 @@ void AE_BaldusGateCharacter::SaveJsonString() // 8번 제이슨 파일 저장
 {
 	for (int32 i = 0; i < MyJsonArray.Num(); i++)
 	{
-		FString path = FString::Printf(TEXT("%s%s"),*FPaths::ProjectDir(),TEXT("test.txt"));
+		FString FileName = FString::Printf(TEXT("%d_test.txt"),i);
+		FString path = FString::Printf(TEXT("%s%s"),*FPaths::ProjectDir(),*FileName);
 		FFileHelper::SaveStringToFile(MyJsonArray[i],*path);
 	}
 }
