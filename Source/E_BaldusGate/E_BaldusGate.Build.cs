@@ -11,7 +11,7 @@ public class E_BaldusGate : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[]
 		{
 			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput","UMG",
-			"Slate",  "SlateCore",
+			"Slate",  "SlateCore", "Json" , "JsonUtilities"
 		});
 	}
 }

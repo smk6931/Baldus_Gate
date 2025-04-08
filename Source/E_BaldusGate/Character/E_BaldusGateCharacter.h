@@ -114,5 +114,20 @@ public:
 
 	void AddItemSlot();
 
+	void ExportStruct();
+
+	void ImportStruct();
+
+	void JsonToItem();
+
+	UPROPERTY(EditAnywhere)
+	FString jsonString;
+	
+
+public:
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
+	FItemStruct MyItemStruct;
+	
+
 };
 

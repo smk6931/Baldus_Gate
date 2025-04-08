@@ -15,7 +15,6 @@ AItemWeapon::AItemWeapon()
 void AItemWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
 	ItemWeaponSpawn();
 }
 

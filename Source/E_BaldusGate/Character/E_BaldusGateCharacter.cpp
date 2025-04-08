@@ -9,6 +9,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "JsonObjectConverter.h"
 #include "MovieSceneTracksComponentTypes.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Image.h"
@@ -93,13 +94,25 @@ void AE_BaldusGateCharacter::Tick(float DeltaTime)
 	{
 		RandomItemDrop();
 	}
-	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::One))
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::R))
 	{
 		AddItemSlot();
 	}
-	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::R))
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::One))
 	{
 		CatchItemDrop();
+	}
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Two))
+	{
+		ExportStruct();
+	}
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Three))
+	{
+		ImportStruct();
+	}
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Four))
+	{
+		JsonToItem();
 	}
 }
 
@@ -155,6 +168,9 @@ void AE_BaldusGateCharacter::AttackWeapon()
 	Weapon->ItemRoot->SetSimulatePhysics(false);
 	Weapon->ItemRoot->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("hand_rSocket"));
+	// Weapon->SetActorLocation(FVector(5.431510,-13.000000,60.939114));
+	// Weapon->SetActorRotation(FRotator(69.285781,223.025730,224.784160));
+	// Weapon->SetActorScale3D(FVector(0.015));
 }
 
 void AE_BaldusGateCharacter::RandomItemDrop()
@@ -215,4 +231,36 @@ void AE_BaldusGateCharacter::AddItemSlot()
 	InventoryMenu->WBP_Inventory->BoxSlot->AddChildToWrapBox(ItemSlot);
 }
 
+void AE_BaldusGateCharacter::ExportStruct() //2번
+{
+	// for (int32 i = 0; i < InventoryMenu->WBP_Inventory->BoxSlot->GetChildrenCount() ; i++)
+	// {
+	// 	UInventorySlotUI* SlotUI = Cast<UInventorySlotUI>(InventoryMenu->WBP_Inventory->BoxSlot->GetChildAt(i));
+	// 	ItemStructArray.Add(SlotUI->ItemStruct);
+	// 	// UE_LOG(LogTemp,Warning,TEXT("구조체 순서%d / 구조체 인덱스%d"),i,ItemStructArray[i].ItemIndex)
+	// 	FJsonObjectConverter::UStructToJsonObjectString(ItemStructArray[i],jsonString);
+	// }
+	
+	int32 index = InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren().Num()-1;
+	UInventorySlotUI* SlotUI = Cast<UInventorySlotUI>(InventoryMenu->WBP_Inventory->BoxSlot->GetChildAt(index));
+	
+	FJsonObjectConverter::UStructToJsonObjectString(SlotUI->ItemStruct,jsonString);
+	UE_LOG(LogTemp,Warning,TEXT("구조체 -> 제이슨 스트링 : %s"),*jsonString);
+}
+
+void AE_BaldusGateCharacter::ImportStruct()//3번
+{
+	FJsonObjectConverter::JsonObjectStringToUStruct(jsonString,&MyItemStruct);
+	UE_LOG(LogTemp,Warning,TEXT("캐릭터 제이슨 아이템 가져오기 : %i"),MyItemStruct.ItemIndex);
+}
+
+
+void AE_BaldusGateCharacter::JsonToItem()// 4번
+{
+	AItem* JsonItem = GetWorld()->SpawnActor<AItem>(PlayerItemFactory, GetActorLocation() + GetActorForwardVector()*25.0f, FRotator(0, 0, 0));
+
+	JsonItem->ItemStruct = MyItemStruct;
+	JsonItem->ItemComponent->SetStaticMesh(JsonItem->ItemMeshes[JsonItem->ItemStruct.ItemIndex]);
+    UE_LOG(LogTemp,Warning,TEXT("캐릭터 제이슨 아이템 소환 %i"),JsonItem->ItemStruct.ItemIndex);
+}
 
