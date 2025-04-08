@@ -9,13 +9,13 @@ struct FItemStruct
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere) // 아이템 상세종류
-    int32 ItemIndex = 0;
+	UPROPERTY(EditAnywhere) // 아이템 대분류
+    int32 ItemIndex = -1;
 
-	UPROPERTY(EditAnywhere) // 아이템 종류
+	UPROPERTY(EditAnywhere) // 아이템 중분류
 	int32 ItemTypeIndex = 0;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere) // 아이템 상세분류
 	int32 ItemDetailIndex = 0;
 	 
 	UPROPERTY(EditAnywhere) // 아이템 이름

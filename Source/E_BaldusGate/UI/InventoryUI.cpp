@@ -13,6 +13,6 @@ void UInventoryUI::NativeConstruct()
 	{
 		SlotUi = CreateWidget<UInventorySlotUI>(GetWorld(),SlotUIFactory);
 		BoxSlot->AddChild(SlotUi);
-		UE_LOG(LogTemp,Warning,TEXT("%i"),i)
+		// UE_LOG(LogTemp,Warning,TEXT("%i"),i)
 	}
 }

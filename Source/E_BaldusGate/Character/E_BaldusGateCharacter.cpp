@@ -101,6 +101,7 @@ void AE_BaldusGateCharacter::Tick(float DeltaTime)
 	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::One))
 	{
 		CatchItemDrop();
+		// CatchImageItem();
 	}
 	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Two))
 	{
@@ -160,7 +161,7 @@ void AE_BaldusGateCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void AE_BaldusGateCharacter::ItemInventory()
+void AE_BaldusGateCharacter::ItemInventory() // I 인벤토리 생성
 {
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	if (flipflop == false)
@@ -195,7 +196,7 @@ void AE_BaldusGateCharacter::RandomItemDrop()
 	PlayerItem = GetWorld()->SpawnActor<AItem>(PlayerItemFactory, GetActorLocation() + GetActorForwardVector()*25.0f, FRotator(0, 0, 0));
 }
 
-void AE_BaldusGateCharacter::CatchItemDrop()
+void AE_BaldusGateCharacter::CatchImageItem()
 {
     FHitResult hitinfo;
 	FCollisionQueryParams Params;
@@ -208,9 +209,63 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 	if (GetItem)
 	{
 		bool SameItem = false;
+		int32 SlotIndex = 0;
 		AItem* Item = Cast<AItem>(hitinfo.GetActor());  if (Item != nullptr){
-			// for (int32 i = 0 ; i < InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren().Num(); i++)
-			// { UInventorySlotUI* Slot = Cast<UInventorySlotUI>(InventoryMenu->WBP_Inventory->BoxSlot->GetChildAt(i));}
+			for (UWidget* Child : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
+			{
+				UInventorySlotUI* Slot = Cast<UInventorySlotUI>(Child);
+				UE_LOG(LogTemp,Warning,TEXT("SlotIndex = %d"),InventoryMenu->WBP_Inventory->BoxSlot->GetChildIndex(Child));
+				// UE_LOG(LogTemp, Warning, TEXT("먹은 아이템 Index: %d / 슬롯 Index: %d / 슬롯 순서 %d" ), 
+				//  Item->ItemStruct.ItemIndex, Slot->ItemStruct.ItemIndex, InventoryMenu->WBP_Inventory->BoxSlot->GetChildIndex(Slot));
+				
+				if (Slot != nullptr && Slot->ItemStruct.ItemIndex == Item->ItemStruct.ItemIndex)
+				{
+					Slot->ItemStruct.ItemNum++;
+					// SlotIndex = Item->ItemStruct.ItemIndex;
+					// 아이템 넘기는게 과연좋은지 아중에 확인해보자
+					Slot->Item = Item;
+					Slot->ItemCount->SetText(FText::AsNumber(Slot->ItemStruct.ItemNum));
+					SameItem = true;
+					break;
+				}
+			}
+			if (SameItem == false)
+			{
+				// for (UWidget* Child : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
+				// {
+				// 	auto* SlotUi = Cast<UInventorySlotUI>(Child);
+				// 	if (SlotUi->ItemStruct.ItemIndex == -1)
+				// 	{
+				// 		SlotUi->ItemStruct = Item->ItemStruct;
+				// 		FSlateBrush Brush;
+				// 		Brush.SetResourceObject(SlotUi->ItemStruct.ItemTextures[])
+				// 		SlotUi->ItemIconImage
+				// 	}
+				// }
+			}
+		}
+		Item->Destroy();
+	}
+	else
+	{
+		UE_LOG(LogTemp,Warning,TEXT("캐릭터 아이템 못먹음"));
+	}
+}
+
+void AE_BaldusGateCharacter::CatchItemDrop()
+{
+	FHitResult hitinfo;
+	FCollisionQueryParams Params;
+
+	DrawDebugBox(GetWorld(), GetActorLocation() + GetActorForwardVector() * 50, FVector(25,25,25),
+		FColor::Black, false, 0.5, 0, 0.5);
+	
+	bool GetItem = GetWorld()->SweepSingleByChannel(hitinfo, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 50,
+		FQuat::Identity,ECC_Visibility, FCollisionShape::MakeBox(FVector(50,50,50)), Params);
+	if (GetItem)
+	{
+		bool SameItem = false;
+		AItem* Item = Cast<AItem>(hitinfo.GetActor());  if (Item != nullptr){
 			for (UWidget* Child : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
 			{
 				UInventorySlotUI* Slot = Cast<UInventorySlotUI>(Child);

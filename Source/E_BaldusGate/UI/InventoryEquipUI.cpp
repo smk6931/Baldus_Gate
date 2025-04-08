@@ -14,14 +14,14 @@
 bool UInventoryEquipUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent,
                                      UDragDropOperation* InOperation)
 {
-	UInventorySlotUI* ItemSlot = Cast<UInventorySlotUI>(InOperation->Payload);
-	LeftBox->AddChildToVerticalBox(ItemSlot);
-
-	if (ItemSlot->ItemStruct.ItemTypeIndex == 1)
-	{
-		AE_BaldusGateCharacter* Character = Cast<AE_BaldusGateCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-		Character->AttackWeapon();
-	}
+	// UInventorySlotUI* ItemSlot = Cast<UInventorySlotUI>(InOperation->Payload);
+	// LeftBox->AddChildToVerticalBox(ItemSlot);
+	//
+	// if (ItemSlot->ItemStruct.ItemTypeIndex == 1)
+	// {
+	// 	AE_BaldusGateCharacter* Character = Cast<AE_BaldusGateCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	// 	Character->AttackWeapon();
+	// }
 
 	return Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);
 }

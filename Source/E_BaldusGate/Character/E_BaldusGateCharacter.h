@@ -124,6 +124,8 @@ public:
 
 	void CatchItemDrop();
 
+	void CatchImageItem();
+
 	void AddItemSlot();
 
 	void ExportStruct();
