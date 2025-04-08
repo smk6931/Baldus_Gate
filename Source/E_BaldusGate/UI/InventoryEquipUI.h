@@ -13,4 +13,10 @@ UCLASS()
 class E_BALDUSGATE_API UInventoryEquipUI : public UUserWidget
 {
 	GENERATED_BODY()
+	
+public:
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UVerticalBox* LeftBox;
+
+	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
 };

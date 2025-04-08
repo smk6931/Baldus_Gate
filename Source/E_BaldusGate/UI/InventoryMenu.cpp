@@ -20,7 +20,7 @@ bool UInventoryMenu::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
 	
 	UInventorySlotUI* ItemSlot = Cast<UInventorySlotUI>(InOperation->Payload);
 	
-	LeftBox->AddChildToVerticalBox(ItemSlot);
+	// LeftBox->AddChildToVerticalBox(ItemSlot);
 	if (ItemSlot->ItemStruct.ItemTypeIndex == 1) // 1번은 웨폰
 	{
 		UE_LOG(LogTemp, Display, TEXT("InventoryMenu::NativeOnDrop: ItemTypeIndex 1 무기임"));
