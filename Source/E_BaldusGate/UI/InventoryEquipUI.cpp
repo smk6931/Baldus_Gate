@@ -9,6 +9,8 @@
 #include "Components/VerticalBox.h"
 #include "E_BaldusGate/Character/E_BaldusGateCharacter.h"
 
+
+
 bool UInventoryEquipUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent,
                                      UDragDropOperation* InOperation)
 {
@@ -22,4 +24,16 @@ bool UInventoryEquipUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDro
 	}
 
 	return Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);
+}
+
+void UInventoryEquipUI::NativeConstruct()
+{
+	Super::NativeConstruct();
+	for (int32 i = 0; i < 4; i++)
+	{ EquipUI = CreateWidget<UInventorySlotUI>(GetWorld(), EquipUIFactory);
+		LeftBox->AddChildToVerticalBox(EquipUI); }
+	
+	for (int32 i = 0; i < 4; i++){
+		EquipUI = CreateWidget<UInventorySlotUI>(GetWorld(), EquipUIFactory);
+			RightBox->AddChildToVerticalBox(EquipUI); }
 }
