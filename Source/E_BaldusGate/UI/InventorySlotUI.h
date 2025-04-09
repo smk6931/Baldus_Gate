@@ -16,12 +16,11 @@ class E_BALDUSGATE_API UInventorySlotUI : public UUserWidget
 	GENERATED_BODY()
 
 public:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
-	FItemStruct ItemStruct;
-
 	UPROPERTY(EditAnywhere)
-	class AItem* Item;
+	FItemStruct ItemStruct;
+	
+	UPROPERTY(EditAnywhere)
+	FItemClientStruct ItemClientStruct;
 	
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UImage* ItemIconImage;

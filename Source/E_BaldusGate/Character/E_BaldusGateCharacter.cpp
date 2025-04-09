@@ -213,12 +213,9 @@ void AE_BaldusGateCharacter::CatchImageItem() // 1번
 				// UE_LOG(LogTemp,Warning,TEXT("SlotIndex = %d"),InventoryMenu->WBP_Inventory->BoxSlot->GetChildIndex(Child));
 				// UE_LOG(LogTemp, Warning, TEXT("먹은 아이템 Index: %d / 슬롯 Index: %d / 슬롯 순서 %d" ), 
 				//  Item->ItemStruct.ItemIndex, Slot->ItemStruct.ItemIndex, InventoryMenu->WBP_Inventory->BoxSlot->GetChildIndex(Slot));
-				
 				if (Slot != nullptr && Slot->ItemStruct.ItemIndex == Item->ItemStruct.ItemIndex)
 				{
 					Slot->ItemStruct.ItemNum++;
-					// SlotIndex = Item->ItemStruct.ItemIndex;
-					// 아이템 넘기는게 과연좋은지 아중에 확인해보자
 					Slot->ItemCount->SetText(FText::AsNumber(Slot->ItemStruct.ItemNum));
 					SameItem = true;
 					break;
@@ -231,10 +228,11 @@ void AE_BaldusGateCharacter::CatchImageItem() // 1번
 					auto* SlotUi = Cast<UInventorySlotUI>(Child);
 					if (SlotUi->ItemStruct.ItemIndex == -1)
 					{
-						SlotUi->Item = Item;
 						UE_LOG(LogTemp,Warning,TEXT("캐릭터 SlotIndex = %d"),InventoryMenu->WBP_Inventory->BoxSlot->GetChildIndex(SlotUi));
 						FSlateBrush Brush;
-						Brush.SetResourceObject(SlotUi->Item->ItemClientStruct.ItemTextures[Item->ItemStruct.ItemIndex]);
+						SlotUi->ItemStruct = Item->ItemStruct;
+						SlotUi->ItemClientStruct = Item->ItemClientStruct;
+						Brush.SetResourceObject(SlotUi->ItemClientStruct.ItemTextures[Item->ItemStruct.ItemIndex]);
 						SlotUi->ItemIconImage->SetBrush(Brush);
 						break;
 					}
@@ -275,7 +273,6 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 				{
 					Slot->ItemStruct.ItemNum++;
 					// 아이템 넘기는게 과연좋은지 아중에 확인해보자
-					Slot->Item = Item;
 					Slot->ItemCount->SetText(FText::AsNumber(Slot->ItemStruct.ItemNum));
 					SameItem = true;
 					break;

@@ -18,4 +18,10 @@ class E_BALDUSGATE_API UItemObject : public UObject
 public:
 	UPROPERTY(EditAnywhere)
     FItemStruct ItemStructObject;
+
+	UPROPERTY(EditAnywhere)
+	FItemClientStruct ItemClientStructObject;
+
+	UPROPERTY(EditAnywhere)
+	class UInventorySlotUI* SlotUI;
 };
