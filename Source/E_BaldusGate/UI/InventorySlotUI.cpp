@@ -48,10 +48,10 @@ bool UInventorySlotUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	
 	ItemStruct = FItemStruct(SlotUi->ItemStruct);
 	Item = SlotUi->Item;
-	UTexture2D* DraggedTexture = ItemStruct.ItemTextures[ItemStruct.ItemIndex];
+	// UTexture2D* DraggedTexture = ItemStruct.ItemTextures[ItemStruct.ItemIndex];
 	
 	FSlateBrush Brush;
-	Brush.SetResourceObject(DraggedTexture);
+	// Brush.SetResourceObject(DraggedTexture);
 	ItemIconImage->SetBrush(Brush);
 	
 	FItemStruct EmptyStruct;

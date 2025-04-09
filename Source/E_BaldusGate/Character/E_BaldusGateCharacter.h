@@ -130,12 +130,6 @@ public:
 
 	void AddItemSlot();
 
-	void ExportStruct();
-
-	void ImportStruct();
-
-	void JsonToItem();
-
 
 	void ExportStructArray();
 
@@ -144,12 +138,6 @@ public:
 	void JsonToItemArray();
 
 	void SaveJsonString();
-
-	
-
-public:
-	
-	
 
 };
 

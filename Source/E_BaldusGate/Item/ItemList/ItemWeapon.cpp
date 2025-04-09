@@ -15,7 +15,7 @@ AItemWeapon::AItemWeapon()
 void AItemWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	ItemWeaponSpawn();
+	// ItemWeaponSpawn();
 }
 
 // Called every frame
@@ -27,7 +27,7 @@ void AItemWeapon::Tick(float DeltaTime)
 void AItemWeapon::ItemWeaponSpawn()
 {
 	RandomItemIndex = 0;
-	ItemComponent->SetStaticMesh(ItemMeshes[RandomItemIndex]);
+	// ItemComponent->SetStaticMesh(ItemMeshes[RandomItemIndex]);
 	ItemStruct.ItemTypeIndex = 1;
 }
 

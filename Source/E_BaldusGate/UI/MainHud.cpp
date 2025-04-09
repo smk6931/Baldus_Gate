@@ -16,9 +16,9 @@ bool UMainHud::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& I
 	{
 		UE_LOG(LogTemp, Display, TEXT("UMainHud:아이템있음"));
 		FSlateBrush brush;
-		brush.SetResourceObject(HudSlot->ItemStruct.ItemTextures[HudSlot->ItemStruct.ItemIndex]);
-		HudImage->SetBrush(brush);
-		ItemStruct = HudSlot->ItemStruct;
+		// brush.SetResourceObject(HudSlot->ItemStruct.ItemTextures[HudSlot->ItemStruct.ItemIndex]);
+		// HudImage->SetBrush(brush);
+		// ItemStruct = HudSlot->ItemStruct;
 	}
 	else
 	{

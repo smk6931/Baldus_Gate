@@ -105,15 +105,12 @@ void AE_BaldusGateCharacter::Tick(float DeltaTime)
 	}
 	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Two))
 	{
-		ExportStruct();
 	}
 	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Three))
 	{
-		ImportStruct();
 	}
 	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Four))
 	{
-		JsonToItem();
 	}
 
 	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Five))
@@ -191,12 +188,12 @@ void AE_BaldusGateCharacter::AttackWeapon()
 	// Weapon->SetActorRelativeScale3D(FVector(0.015));
 }
 
-void AE_BaldusGateCharacter::RandomItemDrop()
+void AE_BaldusGateCharacter::RandomItemDrop() // E 키
 {
 	PlayerItem = GetWorld()->SpawnActor<AItem>(PlayerItemFactory, GetActorLocation() + GetActorForwardVector()*25.0f, FRotator(0, 0, 0));
 }
 
-void AE_BaldusGateCharacter::CatchImageItem()
+void AE_BaldusGateCharacter::CatchImageItem() // 1번
 {
     FHitResult hitinfo;
 	FCollisionQueryParams Params;
@@ -209,7 +206,6 @@ void AE_BaldusGateCharacter::CatchImageItem()
 	if (GetItem)
 	{
 		bool SameItem = false;
-		int32 SlotIndex = 0;
 		AItem* Item = Cast<AItem>(hitinfo.GetActor());  if (Item != nullptr){
 			for (UWidget* Child : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
 			{
@@ -223,7 +219,6 @@ void AE_BaldusGateCharacter::CatchImageItem()
 					Slot->ItemStruct.ItemNum++;
 					// SlotIndex = Item->ItemStruct.ItemIndex;
 					// 아이템 넘기는게 과연좋은지 아중에 확인해보자
-					Slot->Item = Item;
 					Slot->ItemCount->SetText(FText::AsNumber(Slot->ItemStruct.ItemNum));
 					SameItem = true;
 					break;
@@ -236,10 +231,10 @@ void AE_BaldusGateCharacter::CatchImageItem()
 					auto* SlotUi = Cast<UInventorySlotUI>(Child);
 					if (SlotUi->ItemStruct.ItemIndex == -1)
 					{
+						SlotUi->Item = Item;
 						UE_LOG(LogTemp,Warning,TEXT("캐릭터 SlotIndex = %d"),InventoryMenu->WBP_Inventory->BoxSlot->GetChildIndex(SlotUi));
-						SlotUi->ItemStruct = Item->ItemStruct;
 						FSlateBrush Brush;
-						Brush.SetResourceObject(SlotUi->ItemStruct.ItemTextures[SlotUi->ItemStruct.ItemIndex]);
+						Brush.SetResourceObject(SlotUi->Item->ItemClientStruct.ItemTextures[Item->ItemStruct.ItemIndex]);
 						SlotUi->ItemIconImage->SetBrush(Brush);
 						break;
 					}
@@ -290,7 +285,7 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 			{
 				UInventorySlotUI* Slot = CreateWidget<UInventorySlotUI>(GetWorld(), InventorySLotFactory);
 				FSlateBrush Brush;
-				Brush.SetResourceObject(Item->ItemStruct.ItemTextures[Item->ItemStruct.ItemIndex]);
+				// Brush.SetResourceObject(Item->ItemStruct.ItemTextures[Item->ItemStruct.ItemIndex]);
 				Slot->ItemIconImage->SetBrush(Brush);
 				Slot->ItemStruct = Item->ItemStruct;
 				InventoryMenu->WBP_Inventory->BoxSlot->AddChildToWrapBox(Slot);
@@ -304,39 +299,6 @@ void AE_BaldusGateCharacter::AddItemSlot()
 {
 	class UInventorySlotUI* ItemSlot = CreateWidget<UInventorySlotUI>(GetWorld(),InventorySLotFactory);
 	InventoryMenu->WBP_Inventory->BoxSlot->AddChildToWrapBox(ItemSlot);
-}
-
-void AE_BaldusGateCharacter::ExportStruct() //2번
-{
-	// for (int32 i = 0; i < InventoryMenu->WBP_Inventory->BoxSlot->GetChildrenCount() ; i++)
-	// {
-	// 	UInventorySlotUI* SlotUI = Cast<UInventorySlotUI>(InventoryMenu->WBP_Inventory->BoxSlot->GetChildAt(i));
-	// 	ItemStructArray.Add(SlotUI->ItemStruct);
-	// 	// UE_LOG(LogTemp,Warning,TEXT("구조체 순서%d / 구조체 인덱스%d"),i,ItemStructArray[i].ItemIndex)
-	// 	FJsonObjectConverter::UStructToJsonObjectString(ItemStructArray[i],jsonString);
-	// }
-	
-	int32 index = InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren().Num()-1;
-	UInventorySlotUI* SlotUI = Cast<UInventorySlotUI>(InventoryMenu->WBP_Inventory->BoxSlot->GetChildAt(index));
-	
-	FJsonObjectConverter::UStructToJsonObjectString(SlotUI->ItemStruct,jsonString);
-	UE_LOG(LogTemp,Warning,TEXT("구조체 -> 제이슨 스트링 : %s"),*jsonString);
-}
-
-void AE_BaldusGateCharacter::ImportStruct()//3번
-{
-	FJsonObjectConverter::JsonObjectStringToUStruct(jsonString,&MyItemStruct);
-	UE_LOG(LogTemp,Warning,TEXT("캐릭터 제이슨 아이템 가져오기 : %i"),MyItemStruct.ItemIndex);
-}
-
-
-void AE_BaldusGateCharacter::JsonToItem()// 4번
-{
-	AItem* JsonItem = GetWorld()->SpawnActor<AItem>(PlayerItemFactory, GetActorLocation() + GetActorForwardVector()*25.0f, FRotator(0, 0, 0));
-
-	JsonItem->ItemStruct = MyItemStruct;
-	JsonItem->ItemComponent->SetStaticMesh(JsonItem->ItemMeshes[JsonItem->ItemStruct.ItemIndex]);
-    UE_LOG(LogTemp,Warning,TEXT("캐릭터 제이슨 아이템 소환 %i"),JsonItem->ItemStruct.ItemIndex);
 }
 
 void AE_BaldusGateCharacter::ExportStructArray() // 5번 슬롯 아이템 -> 구조체 배열 넣기
@@ -369,7 +331,7 @@ void AE_BaldusGateCharacter::JsonToItemArray() // 7번 제이슨 -> 구조체 �
 		FJsonObjectConverter::JsonObjectStringToUStruct(MyJsonArray[i],&MyItemStruct);
 		MyItemStructArray.Add(MyItemStruct);
 		Item->ItemStruct = MyItemStructArray[i];
-		Item->ItemComponent->SetStaticMesh(Item->ItemMeshes[Item->ItemStruct.ItemIndex]);
+		// Item->ItemComponent->SetStaticMesh(Item->ItemMeshes[Item->ItemStruct.ItemIndex]);
 		UE_LOG(LogTemp,Warning,TEXT("7번 제이슨 -> 구조체 아이템 인덱스%d"),MyItemStructArray[i].ItemIndex);
 	}
 }

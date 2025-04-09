@@ -37,14 +37,21 @@ public:
 	UPROPERTY(EditAnywhere) // 소모 HP 상승
 	int32 HPup = 0;
 
+	UPROPERTY(EditAnywhere)
+	bool bEquip = true;
+};
+
+USTRUCT(Blueprintable, BlueprintType)
+struct FItemClientStruct
+{
+	GENERATED_BODY()
+	
+public:
 	UPROPERTY(EditAnywhere) // 아이템 텍스쳐 int로 바꿀예정	
 	TArray<UTexture2D*>ItemTextures;
 
 	UPROPERTY(EditAnywhere) // 아이템 메쉬 int로 바꿀예정
 	TArray<UStaticMesh*>ItemMeshes;
-
-	UPROPERTY(EditAnywhere)
-	bool bEquip = true;
 };
 
 

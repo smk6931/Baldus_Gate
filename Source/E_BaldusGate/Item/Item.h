@@ -21,7 +21,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Item)
 	FItemStruct ItemStruct;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Item)
+	FItemClientStruct ItemClientStruct;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -30,9 +31,6 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	UPROPERTY(EditAnywhere)
-	TArray<UStaticMesh*> ItemMeshes;
 
 	UPROPERTY(EditAnywhere)
     class UStaticMeshComponent* ItemComponent;
