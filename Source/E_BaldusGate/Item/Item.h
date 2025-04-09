@@ -20,6 +20,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Item)
 	FItemStruct ItemStruct;
+
+	
 	
 protected:
 	// Called when the game starts or when spawned

@@ -47,19 +47,16 @@ bool UInventorySlotUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	UInventorySlotUI* SlotUi = Cast<UInventorySlotUI>(InOperation->Payload);
 	
 	ItemStruct = FItemStruct(SlotUi->ItemStruct);
-	
-	UTexture2D* DraggedTexture = SlotUi->ItemStruct.ItemTextures[SlotUi->ItemStruct.ItemIndex];
+	Item = SlotUi->Item;
+	UTexture2D* DraggedTexture = ItemStruct.ItemTextures[ItemStruct.ItemIndex];
 	
 	FSlateBrush Brush;
 	Brush.SetResourceObject(DraggedTexture);
 	ItemIconImage->SetBrush(Brush);
 	
 	FItemStruct EmptyStruct;
-	SlotUi->ItemStruct = EmptyStruct;
-	ItemStruct.ItemTextures = SlotUi->ItemStruct.ItemTextures;
-	ItemStruct.ItemMeshes = SlotUi->ItemStruct.ItemMeshes;
-	
-	SlotUi->ItemIconImage->SetBrushFromTexture(nullptr);
+	SlotUi->ItemStruct = FItemStruct();
+	SlotUi->Item = nullptr;
 	SlotUi->ItemIconImage->SetColorAndOpacity(FLinearColor::White);
 	
 	return Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);

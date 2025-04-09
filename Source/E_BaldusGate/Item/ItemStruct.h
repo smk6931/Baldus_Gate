@@ -28,8 +28,8 @@ public:
 	UPROPERTY(EditAnywhere) // 아이템 상세설명
 	FString ItemDetail = FString("ItemDetail");
 
-	// UPROPERTY(EditAnywhere) // 아이템 갯수
-	// int32 ItemNum = 0;
+	UPROPERTY(EditAnywhere) // 아이템 갯수
+	int32 ItemNum = 0;
 
 	UPROPERTY(EditAnywhere) // 장비 아이템 공격력
 	int32 Attack = 0;

@@ -28,7 +28,6 @@ void AItemWeapon::ItemWeaponSpawn()
 {
 	RandomItemIndex = 0;
 	ItemComponent->SetStaticMesh(ItemMeshes[RandomItemIndex]);
-	ItemStruct.ItemIndex = RandomItemIndex;
 	ItemStruct.ItemTypeIndex = 1;
 }
 

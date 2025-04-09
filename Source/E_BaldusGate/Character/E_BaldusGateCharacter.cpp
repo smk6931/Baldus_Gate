@@ -244,6 +244,7 @@ void AE_BaldusGateCharacter::CatchImageItem()
 						break;
 					}
 				}
+				UE_LOG(LogTemp,Warning,TEXT("캐릭터 슬롯 없음"))
 			}
 		}
 		Item->Destroy();
