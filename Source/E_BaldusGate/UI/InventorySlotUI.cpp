@@ -46,19 +46,21 @@ bool UInventorySlotUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI::NativeOnDrop"));
 	UInventorySlotUI* SlotUi = Cast<UInventorySlotUI>(InOperation->Payload);
 	
-	ItemStruct = FItemStruct(SlotUi->ItemStruct);
-
-	UTexture2D* DraggedTexture = SlotUi->ItemStruct.ItemTextures[SlotUi->ItemStruct.ItemIndex];
-	
-	FSlateBrush Brush;
-	Brush.SetResourceObject(DraggedTexture);
-	ItemIconImage->SetBrush(Brush);
-
-	FItemStruct EmptyStruct;
-	SlotUi->ItemStruct = EmptyStruct;
-	SlotUi->ItemStruct.ItemTextures = ItemStruct.ItemTextures;
-	SlotUi->ItemIconImage->SetBrushFromTexture(nullptr);
-	SlotUi->ItemIconImage->SetColorAndOpacity(FLinearColor::White);
+	// ItemStruct = FItemStruct(SlotUi->ItemStruct);
+	//
+	// UTexture2D* DraggedTexture = SlotUi->ItemStruct.ItemTextures[SlotUi->ItemStruct.ItemIndex];
+	//
+	// FSlateBrush Brush;
+	// Brush.SetResourceObject(DraggedTexture);
+	// ItemIconImage->SetBrush(Brush);
+	//
+	// FItemStruct EmptyStruct;
+	// SlotUi->ItemStruct = EmptyStruct;
+	// ItemStruct.ItemTextures = SlotUi->ItemStruct.ItemTextures;
+	// ItemStruct.ItemMeshes = SlotUi->ItemStruct.ItemMeshes;
+	//
+	// SlotUi->ItemIconImage->SetBrushFromTexture(nullptr);
+	// SlotUi->ItemIconImage->SetColorAndOpacity(FLinearColor::White);
 	
 	return Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);
 }
