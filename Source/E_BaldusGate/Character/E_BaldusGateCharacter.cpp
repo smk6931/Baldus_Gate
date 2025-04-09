@@ -320,7 +320,8 @@ void AE_BaldusGateCharacter::SaveJsonString() // 8번 제이슨 파일 저장
 {
 	for (int32 i = 0; i < MyJsonArray.Num(); i++)
 	{
-		FString path = FString::Printf(TEXT("%s%s"),*FPaths::ProjectDir(),TEXT("test.txt"));
+		FString FileName = FString::Printf(TEXT("%s%i"),*FPaths::ProjectDir(),i);
+		FString path = FString::Printf(TEXT("%s"),*FileName);
 		FFileHelper::SaveStringToFile(MyJsonArray[i],*path);
 	}
 }

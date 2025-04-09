@@ -11,6 +11,15 @@
 #include "E_BaldusGate/Item/ItemList/ItemWeapon.h"
 #include "E_BaldusGateCharacter.generated.h"
 
+USTRUCT()
+struct FMyStruct
+{
+	GENERATED_BODY()
+public:
+	TArray<FItemStruct> ItemStructArray;
+	
+};
+
 class UInputComponent;
 class USkeletalMeshComponent;
 class UCameraComponent;
