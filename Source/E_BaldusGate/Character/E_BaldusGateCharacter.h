@@ -10,7 +10,9 @@
 #include "E_BaldusGate/Component/ItemComponent.h"
 #include "E_BaldusGate/Item/ItemList/ItemWeapon.h"
 #include "E_BaldusGateCharacter.generated.h"
+// 아이템 ui 컨트룰러 '
 
+// 게임스테이트는 플레이어정보 뺴고 
 class UInputComponent;
 class USkeletalMeshComponent;
 class UCameraComponent;

@@ -100,8 +100,8 @@ void AE_BaldusGateCharacter::Tick(float DeltaTime)
 	}
 	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::One))
 	{
-		CatchItemDrop();
-		// CatchImageItem();
+		// CatchItemDrop();
+		CatchImageItem();
 	}
 	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Two))
 	{
@@ -214,7 +214,7 @@ void AE_BaldusGateCharacter::CatchImageItem()
 			for (UWidget* Child : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
 			{
 				UInventorySlotUI* Slot = Cast<UInventorySlotUI>(Child);
-				UE_LOG(LogTemp,Warning,TEXT("SlotIndex = %d"),InventoryMenu->WBP_Inventory->BoxSlot->GetChildIndex(Child));
+				// UE_LOG(LogTemp,Warning,TEXT("SlotIndex = %d"),InventoryMenu->WBP_Inventory->BoxSlot->GetChildIndex(Child));
 				// UE_LOG(LogTemp, Warning, TEXT("먹은 아이템 Index: %d / 슬롯 Index: %d / 슬롯 순서 %d" ), 
 				//  Item->ItemStruct.ItemIndex, Slot->ItemStruct.ItemIndex, InventoryMenu->WBP_Inventory->BoxSlot->GetChildIndex(Slot));
 				
@@ -231,17 +231,19 @@ void AE_BaldusGateCharacter::CatchImageItem()
 			}
 			if (SameItem == false)
 			{
-				// for (UWidget* Child : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
-				// {
-				// 	auto* SlotUi = Cast<UInventorySlotUI>(Child);
-				// 	if (SlotUi->ItemStruct.ItemIndex == -1)
-				// 	{
-				// 		SlotUi->ItemStruct = Item->ItemStruct;
-				// 		FSlateBrush Brush;
-				// 		Brush.SetResourceObject(SlotUi->ItemStruct.ItemTextures[])
-				// 		SlotUi->ItemIconImage
-				// 	}
-				// }
+				for (UWidget* Child : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
+				{
+					auto* SlotUi = Cast<UInventorySlotUI>(Child);
+					if (SlotUi->ItemStruct.ItemIndex == -1)
+					{
+						UE_LOG(LogTemp,Warning,TEXT("캐릭터 SlotIndex = %d"),InventoryMenu->WBP_Inventory->BoxSlot->GetChildIndex(SlotUi));
+						SlotUi->ItemStruct = Item->ItemStruct;
+						FSlateBrush Brush;
+						Brush.SetResourceObject(SlotUi->ItemStruct.ItemTextures[SlotUi->ItemStruct.ItemIndex]);
+						SlotUi->ItemIconImage->SetBrush(Brush);
+						break;
+					}
+				}
 			}
 		}
 		Item->Destroy();

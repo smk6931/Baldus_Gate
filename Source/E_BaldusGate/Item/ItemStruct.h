@@ -4,6 +4,7 @@
 #include "ItemStruct.Generated.h"
 
 USTRUCT(Blueprintable, BlueprintType)
+//2중 구조체 불변의 데이터 
 struct FItemStruct
 {
 	GENERATED_BODY()
@@ -27,8 +28,8 @@ public:
 	UPROPERTY(EditAnywhere) // 아이템 상세설명
 	FString ItemDetail = FString("ItemDetail");
 
-	UPROPERTY(EditAnywhere) // 아이템 갯수
-	int32 ItemNum = 0;
+	// UPROPERTY(EditAnywhere) // 아이템 갯수
+	// int32 ItemNum = 0;
 
 	UPROPERTY(EditAnywhere) // 장비 아이템 공격력
 	int32 Attack = 0;
@@ -45,3 +46,5 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool bEquip = true;
 };
+
+

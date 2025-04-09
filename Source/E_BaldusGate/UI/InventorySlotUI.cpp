@@ -20,7 +20,7 @@ FReply UInventorySlotUI::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 	UE_LOG(LogTemp, Warning, TEXT("✅ 모든 마우스 클릭 감지!"));
 	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("✅ 왼쪽 마우스 클릭 감지!"));
+		UE_LOG(LogTemp, Warning, TEXT("인벤토리 슬롯 아이템 스트럭트 슬롯있음? %i"),ItemStruct.ItemIndex);
 		return UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton).NativeReply;
 	}
 	return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
@@ -46,21 +46,21 @@ bool UInventorySlotUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI::NativeOnDrop"));
 	UInventorySlotUI* SlotUi = Cast<UInventorySlotUI>(InOperation->Payload);
 	
-	// ItemStruct = FItemStruct(SlotUi->ItemStruct);
-	//
-	// UTexture2D* DraggedTexture = SlotUi->ItemStruct.ItemTextures[SlotUi->ItemStruct.ItemIndex];
-	//
-	// FSlateBrush Brush;
-	// Brush.SetResourceObject(DraggedTexture);
-	// ItemIconImage->SetBrush(Brush);
-	//
-	// FItemStruct EmptyStruct;
-	// SlotUi->ItemStruct = EmptyStruct;
-	// ItemStruct.ItemTextures = SlotUi->ItemStruct.ItemTextures;
-	// ItemStruct.ItemMeshes = SlotUi->ItemStruct.ItemMeshes;
-	//
-	// SlotUi->ItemIconImage->SetBrushFromTexture(nullptr);
-	// SlotUi->ItemIconImage->SetColorAndOpacity(FLinearColor::White);
+	ItemStruct = FItemStruct(SlotUi->ItemStruct);
+	
+	UTexture2D* DraggedTexture = SlotUi->ItemStruct.ItemTextures[SlotUi->ItemStruct.ItemIndex];
+	
+	FSlateBrush Brush;
+	Brush.SetResourceObject(DraggedTexture);
+	ItemIconImage->SetBrush(Brush);
+	
+	FItemStruct EmptyStruct;
+	SlotUi->ItemStruct = EmptyStruct;
+	ItemStruct.ItemTextures = SlotUi->ItemStruct.ItemTextures;
+	ItemStruct.ItemMeshes = SlotUi->ItemStruct.ItemMeshes;
+	
+	SlotUi->ItemIconImage->SetBrushFromTexture(nullptr);
+	SlotUi->ItemIconImage->SetColorAndOpacity(FLinearColor::White);
 	
 	return Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);
 }
