@@ -6,7 +6,6 @@
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
-#include "Components/TextBlock.h"
 #include "E_BaldusGate/Item/Item.h"
 #include "E_BaldusGate/Item/ItemObject.h"
 
@@ -23,6 +22,8 @@ FReply UInventorySlotUI::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("인벤토리 슬롯 아이템 스트럭트 슬롯있음? %i"),ItemStruct.ItemIndex);
+		UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI:: 아이템슬롯 인덱스  %s"), *GetName());
+
 		
 		return UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton).NativeReply;
 	}
@@ -35,13 +36,14 @@ void UInventorySlotUI::NativeOnDragDetected(const FGeometry& InGeometry, const F
 
 	UDragDropOperation* DragOp = NewObject<UDragDropOperation>();
 
-	// UItemObject* ItemObject = NewObject<UItemObject>();
-	// ItemObject->ItemStructObject = ItemStruct;
-	// ItemObject->ItemClientStructObject = ItemClientStruct;
-	// ItemObject->SlotUI = this;
-	// DragOp->Payload = ItemObject;
-	DragOp->Payload = this; // 또는 아이템 정보 구조체
-	DragOp->DefaultDragVisual = this; // 드래그 시 따라다니는 비주얼 (복사본 만들면 깔끔)
+	UItemObject* ItemObject = NewObject<UItemObject>();
+	ItemObject->ItemStructObject = ItemStruct;
+	ItemObject->ItemClientStructObject = ItemClientStruct;
+	ItemIconImage->SetBrush(FSlateBrush());
+	//ItemObject->SlotUI = this;
+	DragOp->Payload = ItemObject;
+	// DragOp->Payload = this; // 또는 아이템 정보 구조체
+	// DragOp->DefaultDragVisual = this; // 드래그 시 따라다니는 비주얼 (복사본 만들면 깔끔)
 	// UImage* DragImage = NewObject<UImage>(this);
 	// DragImage->SetBrush(ItemIconImage->Brush);
 	DragOp->Pivot = EDragPivot::MouseDown;
@@ -52,28 +54,29 @@ bool UInventorySlotUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	UDragDropOperation* InOperation)
 {
 	UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI::NativeOnDrop"));
-	UInventorySlotUI* SlotUI = Cast<UInventorySlotUI>(InOperation->Payload);
-	if (SlotUI)
+	UItemObject* Object = Cast<UItemObject>(InOperation->Payload);
+	if (Object)
 	{
-		Swap(ItemStruct, SlotUI->ItemStruct);
-		Swap(ItemClientStruct, SlotUI->ItemClientStruct);
-		SlotUI->ItemIconImage->SetBrush(FSlateBrush());
+		Swap(ItemStruct, Object->ItemStructObject);
+		Swap(ItemClientStruct, Object->ItemClientStructObject);
+
+		// auto slotUI = Cast<UInventorySlotUI>(InOperation->DefaultDragVisual);
+		// slotUI->ItemIconImage->SetBrush(FSlateBrush());
 		FSlateBrush Brush;
 		Brush.SetResourceObject(ItemClientStruct.ItemTextures[ItemStruct.ItemIndex]);
 		ItemIconImage->SetBrush(Brush);
 		UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI:: 현재 아이템슬롯 인덱스 %s"), *GetName());
-		UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI:: 전  아이템슬롯 인덱스  %s"), *SlotUI->GetName());
+		// UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI:: 전  아이템슬롯 인덱스  %s"), *slotUI->GetName());
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI::NativeOnDropNONONONONNONO"));
 	}
-	UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI::현재 아이템의인덱스 %i"), ItemStruct.ItemIndex);
-	UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI::전  아이템의인덱스 %i"), SlotUI->ItemStruct.ItemIndex);
+	// UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI::현재 아이템의인덱스 %i"), ItemStruct.ItemIndex);
+	// UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI::전  아이템의인덱스 %i"), Object->SlotUI->ItemStruct.ItemIndex);
 
 	
 
-	
 	return Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);
 }
 // UItemObject* ItemObject = Cast<UItemObject>(InOperation->Payload);

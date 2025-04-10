@@ -343,3 +343,7 @@ void AE_BaldusGateCharacter::SaveJsonString() // 8번 제이슨 파일 저장
 	}
 }
 
+void AE_BaldusGateCharacter::PrintSlotUI()
+{
+	
+}

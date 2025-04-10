@@ -26,4 +26,8 @@ public:
 	class UInventorySlotUI* SlotUi;
 	
 	virtual void NativeConstruct() override;
+
+	
+	void PrintSlots();
+	
 };

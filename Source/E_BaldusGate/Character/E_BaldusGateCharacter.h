@@ -106,6 +106,8 @@ protected:
 
 	void ItemInventory();
 
+	UFUNCTION(Exec)
+	void PrintSlotUI();
 protected:
 	// APawn interface
 	virtual void BeginPlay() override;
