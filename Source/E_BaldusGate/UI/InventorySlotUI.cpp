@@ -3,6 +3,7 @@
 
 #include "InventorySlotUI.h"
 
+#include "InventorySlotEmpty.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
@@ -23,7 +24,6 @@ FReply UInventorySlotUI::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 	{
 		UE_LOG(LogTemp, Warning, TEXT("인벤토리 슬롯 아이템 스트럭트 슬롯있음? %i"),ItemStruct.ItemIndex);
 		UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI:: 아이템슬롯 인덱스  %s"), *GetName());
-
 		
 		return UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton).NativeReply;
 	}
@@ -39,13 +39,30 @@ void UInventorySlotUI::NativeOnDragDetected(const FGeometry& InGeometry, const F
 	UItemObject* ItemObject = NewObject<UItemObject>();
 	ItemObject->ItemStructObject = ItemStruct;
 	ItemObject->ItemClientStructObject = ItemClientStruct;
+
+	ItemStruct = FItemStruct();
+	ItemClientStruct = FItemClientStruct();
+
+    UInventorySlotEmpty* SlotEmpty = CreateWidget<UInventorySlotEmpty>(GetWorld(),UInventorySlotEmpty::StaticClass());
+	if (SlotEmpty)
+	{
+		// FSlateBrush Brush;
+		// Brush.SetResourceObject(ItemObject->ItemClientStructObject.ItemTextures[ItemObject->ItemStructObject.ItemIndex])    ;
+		// SlotEmpty->IconImage->SetBrush(Brush);
+	}
+	else
+	{
+		UE_LOG(LogTemp,Warning,TEXT("인벤슬롯 브러쉬없음"))
+	}
+	DragOp->DefaultDragVisual = SlotEmpty; // 드래그 시 따라다니는 비주얼 (복사본 만들면 깔끔)
+	
 	ItemIconImage->SetBrush(FSlateBrush());
-	//ItemObject->SlotUI = this;
+	
 	DragOp->Payload = ItemObject;
-	// DragOp->Payload = this; // 또는 아이템 정보 구조체
-	// DragOp->DefaultDragVisual = this; // 드래그 시 따라다니는 비주얼 (복사본 만들면 깔끔)
+	// UInventorySlotUI* slot = this;
 	// UImage* DragImage = NewObject<UImage>(this);
 	// DragImage->SetBrush(ItemIconImage->Brush);
+	
 	DragOp->Pivot = EDragPivot::MouseDown;
 	OutOperation = DragOp;
 }
@@ -62,11 +79,15 @@ bool UInventorySlotUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 
 		// auto slotUI = Cast<UInventorySlotUI>(InOperation->DefaultDragVisual);
 		// slotUI->ItemIconImage->SetBrush(FSlateBrush());
+		
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
+		{ }, 0.5 , false);
+		
 		FSlateBrush Brush;
 		Brush.SetResourceObject(ItemClientStruct.ItemTextures[ItemStruct.ItemIndex]);
 		ItemIconImage->SetBrush(Brush);
 		UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI:: 현재 아이템슬롯 인덱스 %s"), *GetName());
-		// UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI:: 전  아이템슬롯 인덱스  %s"), *slotUI->GetName());
 	}
 	else
 	{
