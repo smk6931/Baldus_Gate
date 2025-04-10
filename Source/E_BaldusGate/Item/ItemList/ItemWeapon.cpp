@@ -27,7 +27,21 @@ void AItemWeapon::Tick(float DeltaTime)
 void AItemWeapon::ItemWeaponSpawn()
 {
 	RandomItemIndex = 0;
-	// ItemComponent->SetStaticMesh(ItemMeshes[RandomItemIndex]);
+	// ItemComponent->SetStaticMesh(ItemMeshes[5]);
 	ItemStruct.ItemTypeIndex = 1;
+	ItemStruct.ItemIndex = 1;
+}
+
+void AItemWeapon::RandomItemDrop()
+{
+	if (ItemClientStruct.ItemMeshes.Num() > 0)
+	{
+		ItemComponent->SetStaticMesh(ItemClientStruct.ItemMeshes[5]);
+		ItemStruct.ItemIndex = 5;
+	}
+	else
+	{
+		UE_LOG(LogTemp,Error,TEXT("Random Item Not Found%d"),ItemClientStruct.ItemMeshes.Num());
+	}
 }
 

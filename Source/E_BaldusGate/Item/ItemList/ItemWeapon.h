@@ -25,4 +25,6 @@ public:
 
 
 	void ItemWeaponSpawn();
+	
+	virtual void RandomItemDrop() override;;
 };

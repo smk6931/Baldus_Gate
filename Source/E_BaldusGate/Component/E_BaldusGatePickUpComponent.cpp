@@ -12,7 +12,7 @@ UE_BaldusGatePickUpComponent::UE_BaldusGatePickUpComponent()
 void UE_BaldusGatePickUpComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	// Register our Overlap Event
 	OnComponentBeginOverlap.AddDynamic(this, &UE_BaldusGatePickUpComponent::OnSphereBeginOverlap);
 }

@@ -45,5 +45,5 @@ public:
 	void OnMyBeginOverlapped(UPrimitiveComponent* OverlaeppedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSwimming, const FHitResult& SwimmingResult);
 
-	void RandomItemDrop();
+	virtual void RandomItemDrop();
 };
