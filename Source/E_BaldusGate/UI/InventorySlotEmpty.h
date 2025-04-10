@@ -21,4 +21,6 @@ public:
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UTextBlock* Count;
+
+	virtual void NativeConstruct() override;
 };

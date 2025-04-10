@@ -28,6 +28,9 @@ public:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UTextBlock* ItemCount;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UInventorySlotEmpty> SlotEmptyFactory;
+
 	virtual void NativeConstruct() override;
 
 	// void OnCliced();

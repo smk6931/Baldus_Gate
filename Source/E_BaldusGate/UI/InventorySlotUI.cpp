@@ -43,16 +43,14 @@ void UInventorySlotUI::NativeOnDragDetected(const FGeometry& InGeometry, const F
 	ItemStruct = FItemStruct();
 	ItemClientStruct = FItemClientStruct();
 
-    UInventorySlotEmpty* SlotEmpty = CreateWidget<UInventorySlotEmpty>(GetWorld(),UInventorySlotEmpty::StaticClass());
+    UInventorySlotEmpty* SlotEmpty = CreateWidget<UInventorySlotEmpty>(GetWorld(),SlotEmptyFactory);
 	if (SlotEmpty)
 	{
-		// FSlateBrush Brush;
-		// Brush.SetResourceObject(ItemObject->ItemClientStructObject.ItemTextures[ItemObject->ItemStructObject.ItemIndex])    ;
-		// SlotEmpty->IconImage->SetBrush(Brush);
-	}
-	else
-	{
-		UE_LOG(LogTemp,Warning,TEXT("인벤슬롯 브러쉬없음"))
+		FSlateBrush Brush;
+		Brush.SetResourceObject(ItemObject->ItemClientStructObject.ItemTextures[ItemObject->ItemStructObject.ItemIndex])    ;
+		SlotEmpty->IconImage->SetBrush(Brush);
+		if (SlotEmpty->IconImage) { UE_LOG(LogTemp,Warning,TEXT("슬롯UI 아이콘이미지 있음")) }
+		else { UE_LOG(LogTemp,Warning,TEXT("슬롯UI 아이콘이미지 없음")) }
 	}
 	DragOp->DefaultDragVisual = SlotEmpty; // 드래그 시 따라다니는 비주얼 (복사본 만들면 깔끔)
 	
