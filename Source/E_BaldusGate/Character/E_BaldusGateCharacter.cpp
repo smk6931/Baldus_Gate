@@ -185,7 +185,6 @@ void AE_BaldusGateCharacter::AttackWeapon()
 	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("hand_rSocket"));
 	Weapon->SetActorRelativeLocation(FVector(5.431510,-13.000000,60.939114));
 	Weapon->SetActorRelativeRotation(FRotator(69.285781,223.025730,224.784160));
-	// Weapon->SetActorRelativeScale3D(FVector(0.015));
 }
 
 void AE_BaldusGateCharacter::RandomItemDrop() // E 키

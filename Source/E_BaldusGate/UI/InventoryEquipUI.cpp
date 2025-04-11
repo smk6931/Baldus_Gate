@@ -31,6 +31,7 @@ void UInventoryEquipUI::NativeConstruct()
 	Super::NativeConstruct();
 	for (int32 i = 0; i < 4; i++)
 	{ EquipUI = CreateWidget<UInventorySlotUI>(GetWorld(), EquipUIFactory);
+		EquipUI ->SlotType = ESlotType::EquipType;
 		LeftBox->AddChildToVerticalBox(EquipUI); }
 	
 	for (int32 i = 0; i < 4; i++){

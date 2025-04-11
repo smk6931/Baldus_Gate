@@ -61,18 +61,15 @@ public:
 
 	bool flipflop = false;
 
+	//Json 연습용
 	UPROPERTY(EditAnywhere)
 	TArray<FItemStruct> ItemStructArray;
-
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
 	FItemStruct MyItemStruct;
-
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
 	TArray<FItemStruct> MyItemStructArray;
-
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Item)
 	TArray<FString> MyJsonArray;
-
 	UPROPERTY(EditAnywhere)
 	FString jsonString;
 

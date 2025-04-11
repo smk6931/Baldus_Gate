@@ -10,6 +10,15 @@
 /**
  * 
  */
+
+UENUM(BlueprintType)
+enum class ESlotType : uint8
+{
+	ItemType UMETA(DisplayName = "Item Type"), 
+	ConsumeType UMETA(DisplayName = "Consume Type"),
+	EquipType UMETA(DisplayName = "Equip Type"),
+};
+
 UCLASS()
 class E_BALDUSGATE_API UInventorySlotUI : public UUserWidget
 {
@@ -21,6 +30,9 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	FItemClientStruct ItemClientStruct;
+
+	UPROPERTY(EditAnywhere)
+	ESlotType SlotType;
 	
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UImage* ItemIconImage;
@@ -41,4 +53,6 @@ public:
 	
 	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent,
 		UDragDropOperation* InOperation) override;
+
+	void EquipSlot();
 };
