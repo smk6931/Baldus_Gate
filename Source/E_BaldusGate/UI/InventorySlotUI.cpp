@@ -61,7 +61,6 @@ void UInventorySlotUI::NativeOnDragDetected(const FGeometry& InGeometry, const F
 bool UInventorySlotUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent,
 	UDragDropOperation* InOperation)
 {
-	// UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI::NativeOnDrop"));
 	UItemObject* Object = Cast<UItemObject>(InOperation->Payload);
 	if (Object)
 	{
@@ -71,8 +70,7 @@ bool UInventorySlotUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 		FSlateBrush Brush;
 		Brush.SetResourceObject(ItemClientStruct.ItemTextures[ItemStruct.ItemIndex]);
 		ItemIconImage->SetBrush(Brush);
-		// UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI:: 현재 아이템슬롯 인덱스 %s"), *GetName());
-
+		
 		EquipSlot();
 	}
 	return Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);
@@ -80,9 +78,11 @@ bool UInventorySlotUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 
 void UInventorySlotUI::EquipSlot()
 {
-	if (SlotType == ESlotType::EquipType)
+	if (SlotType == ESlotType::EquipType && ItemStruct.ItemTypeIndex == 1)
 	{
 		AE_BaldusGateCharacter* Player = Cast<AE_BaldusGateCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-		Player->AttackWeapon();
+		// AItemWeapon* Weapon = Cast<AItemWeapon>()
+		// Player->AttachWeapon();
+		UE_LOG(LogTemp,Warning,TEXT("슬롯 장비 무기 장착"))
 	}
 }

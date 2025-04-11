@@ -119,7 +119,7 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
-	void AttackWeapon();
+	void AttachWeapon(AItemWeapon* Weapon);
 	
 	void RandomItemDrop();
 

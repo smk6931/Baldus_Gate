@@ -175,9 +175,9 @@ void AE_BaldusGateCharacter::ItemInventory() // I 인벤토리 생성
 	}
 }
 
-void AE_BaldusGateCharacter::AttackWeapon()
+void AE_BaldusGateCharacter::AttachWeapon(AItemWeapon* Weapon)
 {
-	AItemWeapon* Weapon = GetWorld()->SpawnActor<AItemWeapon>(ItemWeaponFactory);
+	// AItemWeapon* Weapon = GetWorld()->SpawnActor<AItemWeapon>(ItemWeaponFactory);
 	Weapon->ItemComponent->SetSimulatePhysics(false);
 	Weapon->ItemComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Weapon->ItemRoot->SetSimulatePhysics(false);

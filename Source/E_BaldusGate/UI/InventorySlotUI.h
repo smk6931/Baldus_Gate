@@ -33,6 +33,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	ESlotType SlotType;
+
+    //UPROPERTY(EditAnywhere)
+	// AItem* Item;
 	
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UImage* ItemIconImage;

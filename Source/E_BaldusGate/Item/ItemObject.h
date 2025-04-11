@@ -24,4 +24,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UInventorySlotUI* SlotUI;
+
+	UPROPERTY(EditAnywhere)
+	class AItem* Item;
 };
