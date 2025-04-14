@@ -58,4 +58,5 @@ public:
 		UDragDropOperation* InOperation) override;
 
 	void EquipSlot();
+
 };

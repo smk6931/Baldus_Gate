@@ -38,3 +38,4 @@ void UInventoryUI::PrintSlots()
 
 	UE_LOG(LogTemp, Display, TEXT("%s"), *text);
 }
+

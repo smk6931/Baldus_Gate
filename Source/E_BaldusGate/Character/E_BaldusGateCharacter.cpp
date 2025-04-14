@@ -8,6 +8,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "IDetailTreeNode.h"
 #include "InputActionValue.h"
 #include "JsonObjectConverter.h"
 #include "MovieSceneTracksComponentTypes.h"
@@ -129,6 +130,10 @@ void AE_BaldusGateCharacter::Tick(float DeltaTime)
 	{
 		SaveJsonString();
 	}
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Nine))
+	{
+		ColletItemStruct();
+	}
 }
 
 
@@ -175,9 +180,10 @@ void AE_BaldusGateCharacter::ItemInventory() // I 인벤토리 생성
 	}
 }
 
-void AE_BaldusGateCharacter::AttachWeapon(AItemWeapon* Weapon)
+void AE_BaldusGateCharacter::AttachWeapon(FItemStruct& SendItemStruct)
 {
-	// AItemWeapon* Weapon = GetWorld()->SpawnActor<AItemWeapon>(ItemWeaponFactory);
+	AItemWeapon* Weapon = GetWorld()->SpawnActor<AItemWeapon>(ItemWeaponFactory);
+	Weapon->ItemStruct = SendItemStruct;
 	Weapon->ItemComponent->SetSimulatePhysics(false);
 	Weapon->ItemComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Weapon->ItemRoot->SetSimulatePhysics(false);
@@ -283,7 +289,7 @@ void AE_BaldusGateCharacter::CatchItemDrop()
 				FSlateBrush Brush;
 				// Brush.SetResourceObject(Item->ItemStruct.ItemTextures[Item->ItemStruct.ItemIndex]);
 				Slot->ItemIconImage->SetBrush(Brush);
-				Slot->ItemStruct = Item->ItemStruct;
+				// Slot->ItemStruct = Item->ItemStruct;
 				InventoryMenu->WBP_Inventory->BoxSlot->AddChildToWrapBox(Slot);
 			}
 		}
@@ -342,7 +348,23 @@ void AE_BaldusGateCharacter::SaveJsonString() // 8번 제이슨 파일 저장
 	}
 }
 
-void AE_BaldusGateCharacter::PrintSlotUI()
+void AE_BaldusGateCharacter::ColletItemStruct() // 9번 슬롯 ItemStruct 저장
 {
-	
+	for (auto Ui : InventoryMenu->WBP_Inventory->BoxSlot->GetAllChildren())
+	{
+		auto slot = Cast<UInventorySlotUI>(Ui);
+		UE_LOG(LogTemp,Warning,TEXT("캐릭터 아이템 박스 슬롯 도는중%i"),InventoryMenu->WBP_Inventory->BoxSlot->GetChildIndex(slot))
+		if (slot->ItemStruct.ItemIndex != -1)
+		{
+			ItemStructArray.Add(slot->ItemStruct);
+			UE_LOG(LogTemp,Warning,TEXT("캐릭터 아이템 박스 슬롯 구조체 넣는중%i"),ItemStructArray.Num())
+		}
+	}
 }
+
+
+
+// void AE_BaldusGateCharacter::PrintSlotUI()
+// {
+// 	
+// }

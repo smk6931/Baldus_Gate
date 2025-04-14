@@ -81,8 +81,10 @@ void UInventorySlotUI::EquipSlot()
 	if (SlotType == ESlotType::EquipType && ItemStruct.ItemTypeIndex == 1)
 	{
 		AE_BaldusGateCharacter* Player = Cast<AE_BaldusGateCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-		// AItemWeapon* Weapon = Cast<AItemWeapon>()
-		// Player->AttachWeapon();
+		// ItemStruct.ItemIndex = 1;
+		// ItemStruct.ItemTypeIndex = 1;
+		
+		Player->AttachWeapon(ItemStruct);
 		UE_LOG(LogTemp,Warning,TEXT("슬롯 장비 무기 장착"))
 	}
 }

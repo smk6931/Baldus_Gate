@@ -103,8 +103,8 @@ protected:
 
 	void ItemInventory();
 
-	UFUNCTION(Exec)
-	void PrintSlotUI();
+	// UFUNCTION(Exec)
+	// void PrintSlotUI();
 protected:
 	// APawn interface
 	virtual void BeginPlay() override;
@@ -119,7 +119,7 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
-	void AttachWeapon(AItemWeapon* Weapon);
+	void AttachWeapon(FItemStruct& ItemStruct);
 	
 	void RandomItemDrop();
 
@@ -137,6 +137,8 @@ public:
 	void JsonToItemArray();
 
 	void SaveJsonString();
+
+	void ColletItemStruct();
 
 };
 
