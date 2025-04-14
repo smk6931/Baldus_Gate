@@ -1,0 +1,12 @@
+{
+	"itemIndex": 2,
+	"itemTypeIndex": 0,
+	"itemDetailIndex": 0,
+	"itemName": "ItemName",
+	"itemType": "ItemType",
+	"itemDetail": "ItemDetail",
+	"itemNum": 0,
+	"attack": 0,
+	"hPup": 0,
+	"bEquip": true
+}

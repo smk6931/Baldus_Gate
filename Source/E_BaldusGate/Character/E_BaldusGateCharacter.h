@@ -22,10 +22,40 @@ struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
+USTRUCT()
+struct FCommentInfo
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(VisibleAnywhere)
+	int32 postid;
+	UPROPERTY(VisibleAnywhere)
+	int32 id;
+	UPROPERTY(VisibleAnywhere)
+	FString name;
+	UPROPERTY(VisibleAnywhere)
+	FString email;
+	UPROPERTY(VisibleAnywhere)
+	FString body;
+};
+
+USTRUCT()
+struct FCommentInfoArray
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(VisibleAnywhere)
+	TArray<FCommentInfo> Data;
+};
+
 UCLASS(config=Game)
 class AE_BaldusGateCharacter : public ACharacter
 {
 	GENERATED_BODY()
+
+public:
+	UPROPERTY(VisibleAnywhere)
+	FCommentInfoArray AllComment;
 
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -143,5 +173,10 @@ public:
 
 	void ColletItemStruct();
 
+	// Http 정보 받기
+	void SendItemInfo();
+
+	// Http 정보 보내기
+	void HttpPost();
 };
 

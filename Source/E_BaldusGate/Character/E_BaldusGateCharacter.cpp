@@ -8,6 +8,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "HttpModule.h"
 #include "InputActionValue.h"
 #include "JsonObjectConverter.h"
 #include "Blueprint/UserWidget.h"
@@ -21,6 +22,8 @@
 #include "E_BaldusGate/UI/InventoryEquipUI.h"
 #include "E_BaldusGate/UI/InventorySlotUI.h"
 #include "E_BaldusGate/UI/InventoryUI.h"
+#include "Interfaces/IHttpRequest.h"
+#include "Interfaces/IHttpResponse.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -154,6 +157,10 @@ void AE_BaldusGateCharacter::Tick(float DeltaTime)
 	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Nine))
 	{
 		ColletItemStruct();
+	}
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Zero))
+	{
+		SendItemInfo();
 	}
 }
 
@@ -332,7 +339,9 @@ void AE_BaldusGateCharacter::ExportStructArray() // 5번 슬롯 아이템 -> 구
 	{
 		UInventorySlotUI* SlotUi = Cast<UInventorySlotUI>(InventoryMenu->WBP_Inventory->BoxSlot->GetChildAt(i));
 		UE_LOG(LogTemp,Warning,TEXT("5번 슬롯 -> 구조체 인덱스 %i"),SlotUi->ItemStruct.ItemIndex);
-		ItemStructArray.Add(SlotUi->ItemStruct);
+		if (SlotUi->ItemStruct.ItemIndex != -1){
+			ItemStructArray.Add(SlotUi->ItemStruct);
+		}
 	}
 }
 
@@ -340,8 +349,8 @@ void AE_BaldusGateCharacter::ImportStructArray() // 6번 구조체 배열-> 제�
 {
 	for (int32 i = 0; i < ItemStructArray.Num(); i++)
 	{
-		FJsonObjectConverter::UStructToJsonObjectString
-		(ItemStructArray[i],jsonString);MyJsonArray.Add(jsonString);
+		FJsonObjectConverter::UStructToJsonObjectString(ItemStructArray[i],jsonString);
+		MyJsonArray.Add(jsonString);
 		UE_LOG(LogTemp,Warning,TEXT("6번 제이슨 인덱스%s"),*jsonString);
 	}
 }
@@ -356,7 +365,7 @@ void AE_BaldusGateCharacter::JsonToItemArray() // 7번 제이슨 -> 구조체 �
 		FJsonObjectConverter::JsonObjectStringToUStruct(MyJsonArray[i],&MyItemStruct);
 		MyItemStructArray.Add(MyItemStruct);
 		Item->ItemStruct = MyItemStructArray[i];
-		// Item->ItemComponent->SetStaticMesh(Item->ItemMeshes[Item->ItemStruct.ItemIndex]);
+		Item->ItemComponent->SetStaticMesh(Item->ItemClientStruct.ItemMeshes[Item->ItemStruct.ItemIndex]);
 		UE_LOG(LogTemp,Warning,TEXT("7번 제이슨 -> 구조체 아이템 인덱스%d"),MyItemStructArray[i].ItemIndex);
 	}
 }
@@ -381,10 +390,60 @@ void AE_BaldusGateCharacter::ColletItemStruct() // 9번 슬롯 ItemStruct 저장
 		{
 			ItemStructArray.Add(slot->ItemStruct);
 			UE_LOG(LogTemp,Warning,TEXT("캐릭터 아이템 박스 슬롯 구조체 넣는중%i"),ItemStructArray.Num())
+			FJsonObjectConverter::UStructToJsonObjectString(ItemStructArray[ItemStructArray.Num()-1],jsonString);
 		}
+	}
+	for (int32 i = 0; i < MyItemStructArray.Num(); i++)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("캐릭터 아이템 jsonString %s"),*jsonString);
 	}
 }
 
+void AE_BaldusGateCharacter::SendItemInfo()
+{
+	FHttpRequestRef httpRequest = FHttpModule::Get().CreateRequest();
+	
+    httpRequest->SetURL(TEXT("https://jsonplaceholder.typicode.com/posts"));
+	// 요청 방식
+	httpRequest->SetVerb(TEXT("Get"));
+	// 헤더를 설정
+	httpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+    // 서버에게 요청을 한 후 응답이 오면 호출되는 함수 등록
+	httpRequest->OnProcessRequestComplete().BindLambda([this](FHttpRequestPtr Request, FHttpResponsePtr Response, bool IsBlocking)
+	{
+		if (IsBlocking)
+		{
+			FString httpJsonString =
+				FString::Printf(TEXT("{\"Data\" : %s}"),
+				// FString::Printf(TEXT("%s"),
+				*Response->GetContentAsString());
+		    UE_LOG(LogTemp,Warning,TEXT("캐릭터 10 번 %s"),*httpJsonString);
+			FJsonObjectConverter::JsonObjectStringToUStruct(httpJsonString, &AllComment);
+		}
+		else
+		{
+			UE_LOG(LogTemp,Warning,TEXT("캐릭터 10 번 %d"), Response->GetResponseCode());
+		}
+	});
+	
+	httpRequest->ProcessRequest();
+}
+
+void AE_BaldusGateCharacter::HttpPost()
+{
+	FHttpRequestRef HttpRequest = FHttpModule::Get().CreateRequest();
+
+	HttpRequest->SetURL(TEXT("https://jsonplaceholder.typicode.com/Posts"));
+
+	HttpRequest->SetVerb(TEXT("POST"));
+	
+	HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+
+	HttpRequest->OnProcessRequestComplete().BindLambda([this](FHttpRequestPtr Request, FHttpResponsePtr Response, bool IsBlocking)
+	{
+		
+	});
+}
 
 
 // void AE_BaldusGateCharacter::PrintSlotUI()
