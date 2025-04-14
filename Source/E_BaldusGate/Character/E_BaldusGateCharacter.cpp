@@ -8,17 +8,17 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "IDetailTreeNode.h"
 #include "InputActionValue.h"
 #include "JsonObjectConverter.h"
-#include "MovieSceneTracksComponentTypes.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "Components/VerticalBox.h"
 #include "Components/WrapBox.h"
 #include "Engine/LocalPlayer.h"
 #include "E_BaldusGate/Component/ItemComponent.h"
 #include "E_BaldusGate/Item/Item.h"
+#include "E_BaldusGate/UI/InventoryEquipUI.h"
 #include "E_BaldusGate/UI/InventorySlotUI.h"
 #include "E_BaldusGate/UI/InventoryUI.h"
 
@@ -45,6 +45,27 @@ void AE_BaldusGateCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	InventoryMenu = CreateWidget<UInventoryMenu>(GetWorld(), InventoryMenuFactory);
+    InventoryMenu->AddToViewport();
+	for (auto Ui : InventoryMenu->WBP_Equip->LeftBox->GetAllChildren())
+	{
+		auto Slot = Cast<UInventorySlotUI>(Ui);
+		Slot->OnDetachItem.BindLambda([this](FItemStruct ItemStruct){
+			if (Weapon)
+			{
+				ItemStruct = Weapon->ItemStruct;
+				FDetachmentTransformRules DetachRule = FDetachmentTransformRules::KeepRelativeTransform;
+				Weapon->DetachFromActor(DetachRule);
+
+				UE_LOG(LogTemp,Warning,TEXT("캐릭터 디테츠 딜리게이트 실행"))
+			}
+			else
+			{
+				UE_LOG(LogTemp,Warning,TEXT("캐릭터 디테츠 딜리게이트 실행X 웨폰없음"))
+
+			}
+		});
+	}
+	InventoryMenu->SetVisibility(ESlateVisibility::Hidden);
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -168,13 +189,15 @@ void AE_BaldusGateCharacter::ItemInventory() // I 인벤토리 생성
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	if (flipflop == false)
 	{
-		InventoryMenu->AddToViewport();
+		InventoryMenu->SetVisibility(ESlateVisibility::Visible);
+		//InventoryMenu-> AddToViewport();
 		flipflop = true;
 		PlayerController->SetShowMouseCursor(true);
 	}
 	else
 	{
-		InventoryMenu->RemoveFromParent();
+		InventoryMenu->SetVisibility(ESlateVisibility::Hidden);
+		// InventoryMenu->RemoveFromParent();
 		flipflop = false;
 		PlayerController->SetShowMouseCursor(false);
 	}
@@ -182,7 +205,7 @@ void AE_BaldusGateCharacter::ItemInventory() // I 인벤토리 생성
 
 void AE_BaldusGateCharacter::AttachWeapon(FItemStruct& SendItemStruct)
 {
-	AItemWeapon* Weapon = GetWorld()->SpawnActor<AItemWeapon>(ItemWeaponFactory);
+	Weapon = GetWorld()->SpawnActor<AItemWeapon>(ItemWeaponFactory);
 	Weapon->ItemStruct = SendItemStruct;
 	Weapon->ItemComponent->SetSimulatePhysics(false);
 	Weapon->ItemComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);

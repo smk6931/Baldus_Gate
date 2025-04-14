@@ -11,6 +11,8 @@
  * 
  */
 
+DECLARE_DELEGATE_OneParam(DetachItem, FItemStruct)
+
 UENUM(BlueprintType)
 enum class ESlotType : uint8
 {
@@ -36,6 +38,8 @@ public:
 
     //UPROPERTY(EditAnywhere)
 	// AItem* Item;
+
+	DetachItem OnDetachItem;
 	
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UImage* ItemIconImage;

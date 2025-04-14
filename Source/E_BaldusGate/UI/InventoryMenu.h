@@ -18,6 +18,9 @@ public:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UInventoryUI* WBP_Inventory;
 
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UInventoryEquipUI* WBP_Equip;
+
 	virtual void NativeConstruct() override;
 	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
 };

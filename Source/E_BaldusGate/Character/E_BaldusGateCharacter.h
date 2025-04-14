@@ -94,6 +94,9 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Component)
 	TSubclassOf<AItemWeapon> ItemWeaponFactory;
 	
+	UPROPERTY(EditAnywhere)
+	class AItemWeapon* Weapon;
+	
 protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);

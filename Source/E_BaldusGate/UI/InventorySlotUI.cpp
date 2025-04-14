@@ -5,10 +5,8 @@
 
 #include "InventorySlotEmpty.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
-#include "Components/Button.h"
 #include "Components/Image.h"
 #include "E_BaldusGate/Character/E_BaldusGateCharacter.h"
-#include "E_BaldusGate/Item/Item.h"
 #include "E_BaldusGate/Item/ItemObject.h"
 
 void UInventorySlotUI::NativeConstruct()
@@ -22,6 +20,22 @@ FReply UInventorySlotUI::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 {
 	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton))
 	{
+		if (SlotType == ESlotType::EquipType)
+		{
+			if (OnDetachItem.IsBound())
+			{
+				OnDetachItem.ExecuteIfBound(ItemStruct);
+				UE_LOG(LogTemp,Warning,TEXT("슬롯 딜게 Bound 있음"));
+			}
+			else
+			{
+				UE_LOG(LogTemp,Warning,TEXT("슬롯 딜게 Bound 없음"));
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp,Warning,TEXT("슬롯 EquipType이 아님"));
+		}
 		// UE_LOG(LogTemp, Warning, TEXT("인벤토리 슬롯 아이템 스트럭트 슬롯있음? %i"),ItemStruct.ItemIndex);
 		// UE_LOG(LogTemp, Warning, TEXT("InventorySlotUI:: 아이템슬롯 인덱스  %s"), *GetName());
 		return UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton).NativeReply;
@@ -81,8 +95,6 @@ void UInventorySlotUI::EquipSlot()
 	if (SlotType == ESlotType::EquipType && ItemStruct.ItemTypeIndex == 1)
 	{
 		AE_BaldusGateCharacter* Player = Cast<AE_BaldusGateCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-		// ItemStruct.ItemIndex = 1;
-		// ItemStruct.ItemTypeIndex = 1;
 		
 		Player->AttachWeapon(ItemStruct);
 		UE_LOG(LogTemp,Warning,TEXT("슬롯 장비 무기 장착"))
