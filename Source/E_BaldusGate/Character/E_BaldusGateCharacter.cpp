@@ -130,6 +130,7 @@ void AE_BaldusGateCharacter::Tick(float DeltaTime)
 	}
 	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Two))
 	{
+		HttpPost();
 	}
 	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::Three))
 	{
@@ -429,8 +430,9 @@ void AE_BaldusGateCharacter::SendItemInfo()
 	httpRequest->ProcessRequest();
 }
 
-void AE_BaldusGateCharacter::HttpPost()
+void AE_BaldusGateCharacter::HttpPost() // 2번
 {
+	UE_LOG(LogTemp,Warning,TEXT("캐릭터 HTTPPOST실행"));
 	FHttpRequestRef HttpRequest = FHttpModule::Get().CreateRequest();
 
 	HttpRequest->SetURL(TEXT("https://jsonplaceholder.typicode.com/Posts"));
@@ -438,11 +440,33 @@ void AE_BaldusGateCharacter::HttpPost()
 	HttpRequest->SetVerb(TEXT("POST"));
 	
 	HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+	
+	// 서버에게 보내고 싶ㅇ은 데이터 값 (Json)
+	FPostInfo info;
+	info.title = TEXT("집에 가고싶다");
+	// info.body = TEXT("놀고 싶다");
+	info.usedId = 1234;
+	info.Count = 5678;
+	FString PostJsonString;
+	FJsonObjectConverter::UStructToJsonObjectString(info, PostJsonString);
+	
+	HttpRequest->SetContentAsString(PostJsonString);
 
 	HttpRequest->OnProcessRequestComplete().BindLambda([this](FHttpRequestPtr Request, FHttpResponsePtr Response, bool IsBlocking)
 	{
-		
+		if (IsBlocking)
+		{
+			FString PostJsonString = Response->GetContentAsString();
+			UE_LOG(LogTemp,Warning,TEXT("캐릭터 Post jsonString  %s"),*PostJsonString);
+		}
+		else
+		{
+			UE_LOG(LogTemp,Warning,TEXT("캐릭터 Post 실패"));
+
+		}
 	});
+
+	HttpRequest->ProcessRequest();
 }
 
 

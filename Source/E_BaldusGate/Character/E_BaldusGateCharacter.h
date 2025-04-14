@@ -48,6 +48,21 @@ public:
 	TArray<FCommentInfo> Data;
 };
 
+USTRUCT()
+struct FPostInfo
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(VisibleAnywhere)
+	FString title;
+	UPROPERTY(VisibleAnywhere)
+	FString body;
+	UPROPERTY(VisibleAnywhere)
+	int32 usedId;
+	UPROPERTY(VisibleAnywhere)
+	int32 Count;
+};
+
 UCLASS(config=Game)
 class AE_BaldusGateCharacter : public ACharacter
 {

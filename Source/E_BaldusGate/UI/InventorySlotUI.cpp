@@ -18,6 +18,12 @@ void UInventorySlotUI::NativeConstruct()
 
 FReply UInventorySlotUI::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
+	if (ItemStruct.ItemIndex == -1)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("InventorySlotUI::NativeOnMouseButtonDown없다인마"));
+		return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
+	}
+	
 	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton))
 	{
 		if (SlotType == ESlotType::EquipType)
